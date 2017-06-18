@@ -25,4 +25,8 @@ public class City {
     public int getY() {
         return y;
     }
+
+    public boolean isMajor() {
+        return major;
+    }
 }

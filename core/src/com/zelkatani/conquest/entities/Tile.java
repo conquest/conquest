@@ -7,6 +7,7 @@ public class Tile {
     private Color color;
     private int width, height;
     private int x, y;
+    private int troops;
 
     private Array<City> cities;
 
@@ -18,7 +19,17 @@ public class Tile {
 
         this.color = color;
 
+        troops = 10;
         cities = new Array<>();
+    }
+
+    public void update() {
+        int base = 5;
+        for (City c : cities) {
+            base += c.isMajor() ? 10 : 7;
+        }
+
+        troops += base;
     }
 
     public Color getColor() {
@@ -39,6 +50,10 @@ public class Tile {
 
     public int getY() {
         return y;
+    }
+
+    public int getTroops() {
+        return troops;
     }
 
     public Array<City> getCities() {
