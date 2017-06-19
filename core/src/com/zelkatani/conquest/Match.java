@@ -15,16 +15,9 @@ public class Match {
     private Camera cam;
     private Array<Tile> tileArray;
 
-    public Match() {
+    public Match(Array<Tile> tileArray) {
         cam = new Camera();
-        tileArray = new Array<>();
-
-        tileArray.add(new Tile(100, 100, 100, 50, Color.GREEN));
-        tileArray.add(new Tile(20, 30, 50, 100, Color.BLUE));
-        tileArray.add(new Tile(100, 100, 150, 200, Color.RED));
-        tileArray.add(new Tile(100, 100, 300, 25, Color.SCARLET));
-
-        tileArray.get(0).addCity(new City(20, 40, false));
+        this.tileArray = tileArray;
 
         Timer.schedule(new Timer.Task() {
             @Override
@@ -42,15 +35,31 @@ public class Match {
         renderer.setProjectionMatrix(cam.combined);
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         for (Tile t : tileArray) {
-            renderer.setColor(t.getColor());
-            renderer.rect(t.getX(), t.getY(), t.getWidth(), t.getHeight());
-
-            for (City city : t.getCities()) {
-                renderer.setColor(city.getColor());
-                renderer.circle(t.getX() + city.getX(), t.getY() + city.getY(), City.SIZE);
-            }
+            drawTile(renderer, t);
         }
         renderer.end();
+    }
+
+    private void drawTile(ShapeRenderer renderer, Tile t) {
+        renderer.setColor(Color.BLACK);
+        renderer.rect(t.getX(), t.getY(), t.getWidth(), t.getHeight());
+
+        renderer.setColor(t.getColor());
+        renderer.rect(t.getX() + 1, t.getY() + 1, t.getWidth() - 1, t.getHeight() - 1);
+
+        if (t.getCity() != null) {
+            drawCity(renderer, t);
+        }
+    }
+
+    private void drawCity(ShapeRenderer renderer, Tile t) {
+        City city = t.getCity();
+
+        renderer.setColor(Color.BLACK);
+        renderer.circle(t.getX() + city.getX(), t.getY() + city.getY(), City.SIZE);
+
+        renderer.setColor(city.getColor());
+        renderer.circle(t.getX() + city.getX(), t.getY() + city.getY(), City.SIZE - 1);
     }
 
     public void drawText(SpriteBatch batch, BitmapFont font, GlyphLayout layout) {

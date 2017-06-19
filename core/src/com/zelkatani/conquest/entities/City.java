@@ -15,7 +15,7 @@ public class City {
     }
 
     public Color getColor() {
-        return major ? Color.GOLD : Color.GRAY;
+        return major ? Color.GOLDENROD : Color.LIGHT_GRAY;
     }
 
     public int getX() {

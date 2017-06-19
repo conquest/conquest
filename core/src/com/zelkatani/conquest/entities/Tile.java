@@ -1,7 +1,6 @@
 package com.zelkatani.conquest.entities;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.utils.Array;
 
 public class Tile {
     private Color color;
@@ -9,7 +8,7 @@ public class Tile {
     private int x, y;
     private int troops;
 
-    private Array<City> cities;
+    private City city;
 
     public Tile(int width, int height, int x, int y, Color color) {
         this.width = width;
@@ -19,17 +18,16 @@ public class Tile {
 
         this.color = color;
 
-        troops = 10;
-        cities = new Array<>();
+        troops = 1;
+        city = null;
     }
 
     public void update() {
-        int base = 5;
-        for (City c : cities) {
-            base += c.isMajor() ? 10 : 7;
-        }
+        troops += 2;
 
-        troops += base;
+        if (city != null) {
+            troops += city.isMajor() ? 5 : 2;
+        }
     }
 
     public Color getColor() {
@@ -56,14 +54,14 @@ public class Tile {
         return troops;
     }
 
-    public Array<City> getCities() {
-        return cities;
+    public City getCity() {
+        return city;
     }
 
-    public void addCity(City city) {
+    public void setCity(City city) {
         // place city relative to rectangle origin, but make sure city fits in boundary
         if (city.getX() < width && city.getY() < height) {
-            cities.add(city);
+            this.city = city;
         }
     }
 }

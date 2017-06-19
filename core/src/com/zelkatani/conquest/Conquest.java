@@ -4,12 +4,13 @@ import com.badlogic.gdx.Game;
 import com.zelkatani.conquest.screens.MatchScreen;
 
 public class Conquest extends Game {
-
-    Match match;
+    private Match match;
+    private Level level;
 
     @Override
     public void create() {
-        match = new Match();
+        level = new Level();
+        match = new Match(level.getTileArray());
 
         setScreen(new MatchScreen(match));
     }
