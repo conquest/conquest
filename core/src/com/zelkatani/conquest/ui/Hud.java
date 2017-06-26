@@ -3,12 +3,12 @@ package com.zelkatani.conquest.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
+import com.zelkatani.conquest.Assets;
 
 public class Hud {
     private Stage stage;
@@ -16,12 +16,11 @@ public class Hud {
 
     private float time;
 
-    public Hud(BitmapFont font) {
+    public Hud() {
         stage = new Stage();
-        timer = new Label(null, new Label.LabelStyle(font, Color.WHITE));
 
+        timer = new Assets.ConquestLabel(null, 0, 10, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         timer.setAlignment(Align.bottom, Align.center);
-        timer.setBounds(0, 10, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         stage.addActor(timer);
 

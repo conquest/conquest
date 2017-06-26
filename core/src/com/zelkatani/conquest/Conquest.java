@@ -14,4 +14,10 @@ public class Conquest extends Game {
 
         setScreen(new MatchScreen(match));
     }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        Assets.BITMAP_FONT.dispose();
+    }
 }

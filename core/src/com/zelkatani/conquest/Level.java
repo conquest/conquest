@@ -27,7 +27,7 @@ public class Level {
 
                 if (tile.get("city") != null) {
                     JsonValue city = tile.get("city");
-                    City c = new City(city.get("x").asInt(), city.get("y").asInt(), city.get("major").asBoolean());
+                    City c = new City(city.get("x").asInt() + t.getX(), city.get("y").asInt() + t.getY(), city.get("major").asBoolean());
 
                     t.setCity(c);
                 }

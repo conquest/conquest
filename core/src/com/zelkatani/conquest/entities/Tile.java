@@ -1,25 +1,49 @@
 package com.zelkatani.conquest.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Disposable;
+import com.zelkatani.conquest.Assets;
 
-public class Tile {
-    private Color color;
-    private int width, height;
-    private int x, y;
+public class Tile extends Actor implements Disposable {
     private int troops;
+    private Label label;
+
+    private Texture texture;
 
     private City city;
 
     public Tile(int width, int height, int x, int y, Color color) {
-        this.width = width;
-        this.height = height;
-        this.x = x;
-        this.y = y;
+        setWidth(width);
+        setHeight(height);
+        setX(x);
+        setY(y);
+        setColor(color);
 
-        this.color = color;
+        texture = new Assets.TileTexture(width, height).getTexture();
 
         troops = 1;
-        city = null;
+
+        label = new Assets.ConquestLabel("" + troops, x, y, width, height);
+        label.setAlignment(Align.center, Align.center);
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        Color color = getColor();
+        batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
+        batch.draw(texture, getX(), getY(), getWidth(), getHeight());
+
+        if (city != null) {
+            city.draw(batch, parentAlpha);
+        }
+
+        label.draw(batch, parentAlpha);
     }
 
     public void update() {
@@ -28,40 +52,20 @@ public class Tile {
         if (city != null) {
             troops += city.isMajor() ? 5 : 2;
         }
-    }
 
-    public Color getColor() {
-        return color;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public int getTroops() {
-        return troops;
-    }
-
-    public City getCity() {
-        return city;
+        Gdx.app.log("troops", label.getText().toString());
+        label.setText("" + troops);
     }
 
     public void setCity(City city) {
-        // place city relative to rectangle origin, but make sure city fits in boundary
-        if (city.getX() < width && city.getY() < height) {
-            this.city = city;
+        this.city = city;
+    }
+
+    @Override
+    public void dispose() {
+        texture.dispose();
+        if (city != null) {
+            city.dispose();
         }
     }
 }
