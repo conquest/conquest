@@ -17,6 +17,7 @@ public class Match implements Disposable {
     public Match(Array<Tile> tileArray) {
         cam = new Camera();
         stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), cam));
+        Gdx.input.setInputProcessor(stage);
 
         this.tileArray = tileArray;
         for (Tile t : this.tileArray) {

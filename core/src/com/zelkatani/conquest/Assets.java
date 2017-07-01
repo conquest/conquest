@@ -62,4 +62,11 @@ public final class Assets {
         }
     }
 
+    public static Color highlight(Color color) {
+        return color.cpy().mul(1.25f);
+    }
+
+    public static Color select(Color color) {
+        return color.cpy().mul(1.5f);
+    }
 }

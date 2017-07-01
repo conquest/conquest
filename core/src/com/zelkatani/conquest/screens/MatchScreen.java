@@ -3,7 +3,6 @@ package com.zelkatani.conquest.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.zelkatani.conquest.Match;
@@ -14,7 +13,6 @@ public class MatchScreen implements Screen {
     private Hud hud;
     private ShapeRenderer renderer;
     private SpriteBatch batch;
-    private GlyphLayout layout;
 
     public MatchScreen(Match match) {
         this.match = match;
@@ -28,8 +26,6 @@ public class MatchScreen implements Screen {
         batch = new SpriteBatch();
 
         hud = new Hud();
-
-        layout = new GlyphLayout();
     }
 
     @Override
