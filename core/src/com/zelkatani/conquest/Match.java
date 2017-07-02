@@ -12,22 +12,21 @@ public class Match implements Disposable {
     private Camera cam;
     private Stage stage;
 
-    private Array<Tile> tileArray;
+    private Array<Tile> tiles;
 
-    public Match(Array<Tile> tileArray) {
+    public Match(Array<Tile> tiles) {
         cam = new Camera();
         stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), cam));
-        Gdx.input.setInputProcessor(stage);
 
-        this.tileArray = tileArray;
-        for (Tile t : this.tileArray) {
+        this.tiles = tiles;
+        for (Tile t : this.tiles) {
             stage.addActor(t);
         }
 
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
-                for (Tile t : tileArray) {
+                for (Tile t : tiles) {
                     t.update();
                 }
             }
@@ -43,8 +42,16 @@ public class Match implements Disposable {
 
     @Override
     public void dispose() {
-        for (Tile t : tileArray) {
+        for (Tile t : tiles) {
             t.dispose();
         }
+    }
+
+    public Array<Tile> getTiles() {
+        return tiles;
+    }
+
+    public Stage getStage() {
+        return stage;
     }
 }

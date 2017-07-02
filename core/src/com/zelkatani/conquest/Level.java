@@ -9,11 +9,11 @@ import com.zelkatani.conquest.entities.City;
 import com.zelkatani.conquest.entities.Tile;
 
 public class Level {
-    private Array<Tile> tileArray;
+    private Array<Tile> tiles;
 
     public Level() {
         JsonReader reader = new JsonReader();
-        tileArray = new Array<>();
+        tiles = new Array<>();
 
         JsonValue value = reader.parse(Gdx.files.internal("maps/test.json"));
 
@@ -32,12 +32,12 @@ public class Level {
                     t.setCity(c);
                 }
 
-                tileArray.add(t);
+                tiles.add(t);
             }
         }
     }
 
-    public Array<Tile> getTileArray() {
-        return tileArray;
+    public Array<Tile> getTiles() {
+        return tiles;
     }
 }

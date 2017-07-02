@@ -3,6 +3,7 @@ package com.zelkatani.conquest.entities;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -89,6 +90,18 @@ public class Tile extends Actor implements Disposable {
 
     public void setCity(City city) {
         this.city = city;
+    }
+
+    public void setHovered(boolean hovered) {
+        this.hovered = hovered;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public Vector2 getCenter() {
+        return new Vector2(getX() + getWidth() / 2, getY() + getHeight() / 2);
     }
 
     @Override

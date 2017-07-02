@@ -10,7 +10,7 @@ public class Conquest extends Game {
     @Override
     public void create() {
         level = new Level();
-        match = new Match(level.getTileArray());
+        match = new Match(level.getTiles());
 
         setScreen(new MatchScreen(match));
     }
