@@ -18,6 +18,6 @@ public class Conquest extends Game {
     @Override
     public void dispose() {
         super.dispose();
-        Assets.BITMAP_FONT.dispose();
+        Assets.SKIN.dispose();
     }
 }

@@ -9,11 +9,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.zelkatani.conquest.Match;
 import com.zelkatani.conquest.ui.Grabber;
 import com.zelkatani.conquest.ui.Hud;
+import com.zelkatani.conquest.ui.Manager;
 
 public class MatchScreen implements Screen {
     private Match match;
     private Hud hud;
     private Grabber grabber;
+    private Manager manager;
+
     private ShapeRenderer renderer;
     private SpriteBatch batch;
 
@@ -30,7 +33,9 @@ public class MatchScreen implements Screen {
         batch = new SpriteBatch();
 
         hud = new Hud();
-        Gdx.input.setInputProcessor(new InputMultiplexer(match.getStage(), grabber));
+        manager = new Manager();
+
+        Gdx.input.setInputProcessor(new InputMultiplexer(match.getStage(), grabber, manager.getStage()));
     }
 
     @Override
@@ -44,6 +49,7 @@ public class MatchScreen implements Screen {
         grabber.draw(renderer);
 
         hud.draw(renderer);
+        manager.draw();
     }
 
     @Override

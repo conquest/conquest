@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
+import com.zelkatani.conquest.ui.Manager;
 
 public class Camera extends OrthographicCamera {
     public Camera() {
@@ -12,7 +13,10 @@ public class Camera extends OrthographicCamera {
 
     @Override
     public void update() {
-        handle();
+        if (!Manager.isVisible()) {
+            handle();
+        }
+
         update(true);
     }
 

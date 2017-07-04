@@ -34,8 +34,6 @@ public class Match implements Disposable {
     }
 
     public void draw() {
-        cam.update();
-
         stage.act();
         stage.draw();
     }

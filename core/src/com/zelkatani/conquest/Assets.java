@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public final class Assets {
 
@@ -45,19 +47,9 @@ public final class Assets {
         pixmap.dispose();
     }
 
-    public static final BitmapFont BITMAP_FONT;
-    static {
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Roboto.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 24;
-        parameter.borderWidth = 2;
-        BITMAP_FONT = generator.generateFont(parameter);
-        generator.dispose();
-    }
-
     public static final class ConquestLabel extends com.badlogic.gdx.scenes.scene2d.ui.Label {
         public ConquestLabel(String text, int x, int y, int width, int height) {
-            super(text, new LabelStyle(BITMAP_FONT, Color.WHITE));
+            super(text, Assets.SKIN);
             setBounds(x, y, width, height);
         }
     }
@@ -68,5 +60,19 @@ public final class Assets {
 
     public static Color select(Color color) {
         return color.cpy().mul(1.5f);
+    }
+
+    public static final Skin SKIN = new Skin();
+    static {
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Roboto.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 24;
+        parameter.borderWidth = 2;
+
+        SKIN.add("roboto", generator.generateFont(parameter), BitmapFont.class);
+        generator.dispose();
+
+        SKIN.addRegions(new TextureAtlas(Gdx.files.internal("skin/skin.atlas")));
+        SKIN.load(Gdx.files.internal("skin/skin.json"));
     }
 }
