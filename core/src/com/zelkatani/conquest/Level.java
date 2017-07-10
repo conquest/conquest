@@ -23,7 +23,7 @@ public class Level {
             Color color = new Color(rgb[0] / 255f, rgb[1] / 255f, rgb[2] / 255f, 1);
 
             for (JsonValue tile : region.get("tiles")) {
-                Tile t = new Tile(tile.get("w").asInt(), tile.get("h").asInt(), tile.get("x").asInt(), tile.get("y").asInt(), color);
+                Tile t = new Tile(tile.get("x").asInt(), tile.get("y").asInt(), tile.get("w").asInt(), tile.get("h").asInt(), color);
 
                 if (tile.get("city") != null) {
                     JsonValue city = tile.get("city");

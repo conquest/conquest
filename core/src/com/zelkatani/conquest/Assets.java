@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public final class Assets {
-
     public static final class TileTexture {
         private Texture texture;
 
@@ -21,7 +20,7 @@ public final class Assets {
             pixmap.fillRectangle(0, 0, width, height);
 
             pixmap.setColor(Color.WHITE);
-            pixmap.fillRectangle(1, 1, width - 1, height - 1);
+            pixmap.fillRectangle(1, 1, width - 2, height - 2);
 
             texture = new Texture(pixmap);
 

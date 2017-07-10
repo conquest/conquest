@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.zelkatani.conquest.Match;
+import com.zelkatani.conquest.entities.Pathway;
 import com.zelkatani.conquest.ui.Grabber;
 import com.zelkatani.conquest.ui.Hud;
 import com.zelkatani.conquest.ui.Manager;
@@ -14,8 +15,10 @@ import com.zelkatani.conquest.ui.Manager;
 public class MatchScreen implements Screen {
     private Match match;
     private Hud hud;
-    private Grabber grabber;
+
+    private Pathway pathway;
     private Manager manager;
+    private Grabber grabber;
 
     private ShapeRenderer renderer;
     private SpriteBatch batch;
@@ -28,12 +31,12 @@ public class MatchScreen implements Screen {
     public void show() {
         renderer = new ShapeRenderer();
         renderer.setAutoShapeType(true);
-        grabber = new Grabber(match.getTiles(), match.getStage().getCamera());
-
         batch = new SpriteBatch();
 
         hud = new Hud();
-        manager = new Manager();
+        pathway = new Pathway(match.getTiles());
+        manager = new Manager(pathway);
+        grabber = new Grabber(match.getTiles(), match.getStage().getCamera(), manager, pathway);
 
         Gdx.input.setInputProcessor(new InputMultiplexer(match.getStage(), grabber, manager.getStage()));
     }

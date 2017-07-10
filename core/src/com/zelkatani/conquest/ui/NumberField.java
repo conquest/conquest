@@ -6,14 +6,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
 
 class NumberField extends TextField {
-    public NumberField(String text, Skin skin) {
+    NumberField(String text, Skin skin) {
         super(text, skin);
         setTextFieldFilter(new TextFieldFilter.DigitsOnlyFilter());
-        setPosition(Gdx.graphics.getWidth() / 3 - getWidth() / 2, (Gdx.graphics.getHeight() - getHeight()) / 2);
+        setPosition(Gdx.graphics.getWidth() / 3 - getWidth() / 2, Gdx.graphics.getHeight() / 2 + getHeight() / 4);
         setAlignment(Align.center);
     }
 
-    public int getValue() {
-        return Integer.parseInt(getMessageText());
+    int getValue() {
+        return Integer.parseInt(getText());
     }
 }
