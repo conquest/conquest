@@ -35,6 +35,11 @@ public class Level {
                 tiles.add(t);
             }
         }
+
+        for (int i = 0; i < tiles.size; i++) {
+            tiles.get(i).setContacts(tiles);
+            tiles.get(i).setIndex(i);
+        }
     }
 
     public Array<Tile> getTiles() {

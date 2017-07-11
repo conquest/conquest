@@ -1,5 +1,6 @@
 package com.zelkatani.conquest.entities;
 
+import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -8,14 +9,19 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.zelkatani.conquest.Assets;
+import com.zelkatani.conquest.pathfinding.Contact;
 
 public class Tile extends Actor implements Disposable {
     private int troops;
     private Label label;
     private Texture texture;
     private City city;
+
+    private Array<Connection<Tile>> contacts;
+    private int index;
 
     private Rectangle rectangle;
 
@@ -28,6 +34,8 @@ public class Tile extends Actor implements Disposable {
         setWidth(width);
         setHeight(height);
         setColor(color);
+
+        contacts = new Array<>();
 
         rectangle = new Rectangle(x, y, width, height);
         texture = new Assets.TileTexture(width, height).getTexture();
@@ -113,5 +121,30 @@ public class Tile extends Actor implements Disposable {
     public void transferTroops(Tile to, int value) {
         troops -= value;
         to.addTroops(value);
+    }
+
+    public void setContacts(Array<Tile> tiles) {
+        Rectangle bounds = new Rectangle(rectangle);
+        bounds.setSize(rectangle.width + 2, rectangle.height + 2);
+        bounds.setPosition(rectangle.x - 1, rectangle.y - 1);
+
+        for (Tile t : tiles) {
+            if (t == this) continue;
+            if (bounds.overlaps(t.getRectangle())) {
+                contacts.add(new Contact(this, t));
+            }
+        }
+    }
+
+    public Array<Connection<Tile>> getContacts() {
+        return contacts;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 }
