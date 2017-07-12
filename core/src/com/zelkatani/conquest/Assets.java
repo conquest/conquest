@@ -38,6 +38,7 @@ public final class Assets {
 
         pixmap.setColor(Color.BLACK);
         pixmap.fillCircle(10, 10, 10);
+
         pixmap.setColor(Color.WHITE);
         pixmap.fillCircle(10, 10, 9);
 
@@ -47,10 +48,26 @@ public final class Assets {
     }
 
     public static final class ConquestLabel extends com.badlogic.gdx.scenes.scene2d.ui.Label {
-        public ConquestLabel(String text, int x, int y, int width, int height) {
+        public ConquestLabel(String text, float x, float y, float width, float height) {
             super(text, Assets.SKIN);
             setBounds(x, y, width, height);
         }
+    }
+
+    public static final Texture TROOP;
+    static {
+        int width = 40, height = 20;
+        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGB888);
+
+        pixmap.setColor(Color.BLACK);
+        pixmap.fillRectangle(0, 0, width, height);
+
+        pixmap.setColor(Color.WHITE);
+        pixmap.fillRectangle(1, 1, width - 2, height - 2);
+
+        TROOP = new Texture(pixmap);
+
+        pixmap.dispose();
     }
 
     public static Color highlight(Color color) {

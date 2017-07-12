@@ -118,9 +118,8 @@ public class Tile extends Actor implements Disposable {
         troops += value;
     }
 
-    public void transferTroops(Tile to, int value) {
+    public void removeTroops(int value) {
         troops -= value;
-        to.addTroops(value);
     }
 
     public void setContacts(Array<Tile> tiles) {

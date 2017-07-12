@@ -15,7 +15,6 @@ public class Pathway {
     private EuclidianHeuristic heuristic;
 
     private GraphPath<Tile> graphPath;
-    private Array<GraphPath<Tile>> paths;
 
     public Pathway(Array<Tile> tiles) {
         start = new Array<>();
@@ -25,7 +24,6 @@ public class Pathway {
         heuristic = new EuclidianHeuristic();
 
         graphPath = new DefaultGraphPath<>();
-        paths = new Array<>();
     }
 
     public Array<Tile> getStart() {
@@ -45,10 +43,13 @@ public class Pathway {
     }
 
     public void sendMax() {
-        getPaths();
-
         for (Tile tile : start) {
-            tile.transferTroops(end, tile.getTroops() - 1);
+            int value = tile.getTroops() - 1;
+            if (value == 0 || tile == end) continue;
+
+            tile.removeTroops(value);
+            sendTroop(tile, value);
+
             tile.updateLabel();
         }
 
@@ -57,10 +58,13 @@ public class Pathway {
     }
 
     public void send(int value) {
-        getPaths();
-
         for (Tile tile : start) {
-            tile.transferTroops(end, tile.getTroops() > value ? value : tile.getTroops() - 1);
+            int adjust = tile.getTroops() > value ? value : tile.getTroops() - 1;
+            if (adjust == 0 || tile == end) continue;
+
+            tile.removeTroops(adjust);
+            sendTroop(tile, adjust);
+
             tile.updateLabel();
         }
 
@@ -68,11 +72,11 @@ public class Pathway {
         clearStart();
     }
 
-    private void getPaths() {
-        for (Tile tile : start) {
-            pathFinder.searchNodePath(tile, end, heuristic, graphPath);
-            paths.add(graphPath);
-            graphPath.clear();
-        }
+    private void sendTroop(Tile current, int value) {
+        pathFinder.searchNodePath(current, end, heuristic, graphPath);
+
+        Troop troop = new Troop(value, graphPath);
+        current.getStage().addActor(troop);
+        graphPath.clear();
     }
 }
