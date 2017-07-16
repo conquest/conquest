@@ -42,8 +42,9 @@ public class Manager {
 
                 if (event.getTarget() instanceof Group) {
                     setVisible(false);
+                    return false;
                 }
-                return false;
+                return true;
             }
         });
 
@@ -51,6 +52,7 @@ public class Manager {
 
         partialSendButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+                Manager.this.pathway.deselect();
                 Manager.this.pathway.send(numberField.getValue());
 
                 setVisible(false);
@@ -59,6 +61,7 @@ public class Manager {
 
         maxSendButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+                Manager.this.pathway.deselect();
                 Manager.this.pathway.sendMax();
 
                 setVisible(false);

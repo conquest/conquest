@@ -1,6 +1,5 @@
 package com.zelkatani.conquest.entities;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 import com.badlogic.gdx.ai.pfa.GraphPath;
 import com.badlogic.gdx.graphics.Color;
@@ -9,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
@@ -64,7 +62,8 @@ public class Troop extends Actor implements Disposable {
     }
 
     private float speed(Tile now, Tile next) {
-        return MathUtils.clamp(centered(now).dst(centered(next)) * MathUtils.log(5, troops) / 25, 1, 5);
+        float time = centered(now).dst(centered(next)) * MathUtils.log(5, troops) / 30;
+        return MathUtils.floor(MathUtils.clamp(time, 1, 5));
     }
 
     private void createActions() {

@@ -7,16 +7,16 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.zelkatani.conquest.Assets;
+import com.zelkatani.conquest.Assets.ConquestLabel;
 import com.zelkatani.conquest.pathfinding.Contact;
 
 public class Tile extends Actor implements Disposable {
     private int troops;
-    private Label label;
+    private ConquestLabel label;
     private Texture texture;
     private City city;
 
@@ -28,7 +28,7 @@ public class Tile extends Actor implements Disposable {
     private boolean hovered = false,
             selected = false;
 
-    public Tile(int x, int y, int width, int height, Color color) {
+    public Tile(float x, float y, int width, int height, Color color) {
         setX(x);
         setY(y);
         setWidth(width);
@@ -41,7 +41,7 @@ public class Tile extends Actor implements Disposable {
         texture = new Assets.TileTexture(width, height).getTexture();
         troops = 1;
 
-        label = new Assets.ConquestLabel("" + troops, x, y, width, height);
+        label = new ConquestLabel("" + troops, x, y, width, height);
         label.setAlignment(Align.center, Align.center);
     }
 
@@ -60,8 +60,6 @@ public class Tile extends Actor implements Disposable {
         if (city != null) {
             city.draw(batch, parentAlpha);
         }
-
-        label.draw(batch, parentAlpha);
     }
 
     public void update() {
@@ -75,7 +73,7 @@ public class Tile extends Actor implements Disposable {
     }
 
     public void updateLabel() {
-        label.setText("" + troops);
+        label.setText(troops);
     }
 
     public void setCity(City city) {
@@ -145,5 +143,9 @@ public class Tile extends Actor implements Disposable {
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    public ConquestLabel getLabel() {
+        return label;
     }
 }

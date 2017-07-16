@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public final class Assets {
@@ -47,10 +48,18 @@ public final class Assets {
         pixmap.dispose();
     }
 
-    public static final class ConquestLabel extends com.badlogic.gdx.scenes.scene2d.ui.Label {
+    public static final class ConquestLabel extends Label {
         public ConquestLabel(String text, float x, float y, float width, float height) {
             super(text, Assets.SKIN);
             setBounds(x, y, width, height);
+        }
+
+        public void setText(int number) {
+            if (number >= 1e3f) {
+                setText(String.format("%sk", number / 1e3f));
+            } else {
+                setText(String.format("%s", number));
+            }
         }
     }
 

@@ -14,7 +14,7 @@ public class Contact implements Connection<Tile> {
 
     @Override
     public float getCost() {
-        return 0;
+        return fromNode.getCenter().dst(toNode.getCenter()) / 10;
     }
 
     @Override

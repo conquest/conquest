@@ -47,13 +47,9 @@ public class Pathway {
             int value = tile.getTroops() - 1;
             if (value == 0 || tile == end) continue;
 
-            tile.removeTroops(value);
             sendTroop(tile, value);
-
-            tile.updateLabel();
         }
 
-        end.updateLabel();
         clearStart();
     }
 
@@ -62,21 +58,28 @@ public class Pathway {
             int adjust = tile.getTroops() > value ? value : tile.getTroops() - 1;
             if (adjust == 0 || tile == end) continue;
 
-            tile.removeTroops(adjust);
             sendTroop(tile, adjust);
-
-            tile.updateLabel();
         }
 
-        end.updateLabel();
         clearStart();
     }
 
     private void sendTroop(Tile current, int value) {
-        pathFinder.searchNodePath(current, end, heuristic, graphPath);
+        boolean found = pathFinder.searchNodePath(current, end, heuristic, graphPath);
 
-        Troop troop = new Troop(value, graphPath);
-        current.getStage().addActor(troop);
+        if (found) {
+            current.removeTroops(value);
+            Troop troop = new Troop(value, graphPath);
+            current.getStage().addActor(troop);
+            current.updateLabel();
+        }
         graphPath.clear();
+    }
+
+    public void deselect() {
+        for (Tile tile : start) {
+            tile.setSelected(false);
+        }
+        end.setSelected(false);
     }
 }

@@ -16,7 +16,6 @@ public class MatchScreen implements Screen {
     private Match match;
     private Hud hud;
 
-    private Pathway pathway;
     private Manager manager;
     private Grabber grabber;
 
@@ -34,11 +33,11 @@ public class MatchScreen implements Screen {
         batch = new SpriteBatch();
 
         hud = new Hud();
-        pathway = new Pathway(match.getTiles());
+        Pathway pathway = new Pathway(match.getTiles());
         manager = new Manager(pathway);
-        grabber = new Grabber(match.getTiles(), match.getStage().getCamera(), manager, pathway);
+        grabber = new Grabber(match.getTiles(), match.getCam(), manager, pathway);
 
-        Gdx.input.setInputProcessor(new InputMultiplexer(match.getStage(), grabber, manager.getStage()));
+        Gdx.input.setInputProcessor(new InputMultiplexer(manager.getStage(), grabber, match.getStage()));
     }
 
     @Override

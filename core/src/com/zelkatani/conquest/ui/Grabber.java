@@ -2,13 +2,13 @@ package com.zelkatani.conquest.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.zelkatani.conquest.ConquestCamera;
 import com.zelkatani.conquest.entities.Pathway;
 import com.zelkatani.conquest.entities.Tile;
 
@@ -24,7 +24,7 @@ public class Grabber extends InputAdapter {
 
     private Array<Tile> tiles;
     private Rectangle rect;
-    private Camera cam;
+    private ConquestCamera cam;
 
     private Manager manager;
     private Pathway pathway;
@@ -32,7 +32,7 @@ public class Grabber extends InputAdapter {
     private float touchX, touchY, mouseX, mouseY;
     private Mode mode;
 
-    public Grabber(Array<Tile> tiles, Camera cam, Manager manager, Pathway pathway) {
+    public Grabber(Array<Tile> tiles, ConquestCamera cam, Manager manager, Pathway pathway) {
         this.tiles = tiles;
         rect = new Rectangle();
         this.cam = cam;
@@ -44,7 +44,7 @@ public class Grabber extends InputAdapter {
     }
 
     public void draw(ShapeRenderer renderer) {
-        if (rect.width < 25 || rect.height < 25) return;
+        if (rect.width < 25 * cam.zoom || rect.height < 25 * cam.zoom) return;
 
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -66,7 +66,7 @@ public class Grabber extends InputAdapter {
 
         Vector3 vector3 = correct(mouseX, mouseY);
 
-        rect.set(vector3.x + offX, vector3.y + offY, Math.abs(width), Math.abs(height));
+        rect.set(vector3.x + offX * cam.zoom, vector3.y + offY * cam.zoom, Math.abs(width * cam.zoom), Math.abs(height * cam.zoom));
 
         if (rect.width < 10 || rect.height < 10) return;
         for (Tile tile : tiles) {
@@ -98,13 +98,22 @@ public class Grabber extends InputAdapter {
 
         Vector3 vector3 = correct(screenX, screenY);
 
+        boolean any = true;
         for (Tile tile : tiles) {
             tile.setHovered(false);
             tile.setSelected(tile.getRectangle().contains(vector3.x, vector3.y));
-            if (tile.isSelected() && mode.equals(Mode.NONE)) {
-                mode = Mode.FIRST;
+            if (tile.isSelected()) {
+                any = false;
+                if (mode.equals(Mode.NONE)) {
+                    mode = Mode.FIRST;
+                }
             }
         }
+
+        if (any) {
+            pathway.clearStart();
+        }
+
         return false;
     }
 
@@ -134,12 +143,12 @@ public class Grabber extends InputAdapter {
                 break;
             }
             case SECOND: {
-                pathway.setEnd(selected.get(0));
-                manager.setVisible(true);
-
                 for (Tile t : pathway.getStart()) {
                     t.setSelected(true);
                 }
+
+                pathway.setEnd(selected.get(0));
+                manager.setVisible(true);
             }
         }
 
@@ -160,6 +169,12 @@ public class Grabber extends InputAdapter {
         for (Tile tile : tiles) {
             tile.setHovered(rect.contains(tile.getCenter()));
         }
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        cam.zoom += 0.05 * amount;
         return false;
     }
 }

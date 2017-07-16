@@ -15,19 +15,22 @@ public class Level {
         JsonReader reader = new JsonReader();
         tiles = new Array<>();
 
-        JsonValue value = reader.parse(Gdx.files.internal("maps/test.json"));
+        JsonValue value = reader.parse(Gdx.files.internal("maps/new-york.json"));
+        JsonValue regions = value.get("regions");
+        float scale = value.get("scale").asFloat();
 
-        // All regions MUST have tiles in them.
-        for (JsonValue region : value) {
-            int[] rgb = region.get("color").asIntArray();
-            Color color = new Color(rgb[0] / 255f, rgb[1] / 255f, rgb[2] / 255f, 1);
+        for (JsonValue region : regions) {
+            Color color = Color.valueOf(region.get("color").asString());
 
             for (JsonValue tile : region.get("tiles")) {
-                Tile t = new Tile(tile.get("x").asInt(), tile.get("y").asInt(), tile.get("w").asInt(), tile.get("h").asInt(), color);
+                int x = tile.get("x").asInt(), y = tile.get("y").asInt();
+                int width = tile.get("w").asInt(), height = tile.get("h").asInt();
+                Tile t = new Tile(x * scale, y * scale, (int) (width * scale), (int) (height * scale), color);
 
                 if (tile.get("city") != null) {
                     JsonValue city = tile.get("city");
-                    City c = new City(city.get("x").asInt() + t.getX(), city.get("y").asInt() + t.getY(), city.get("major").asBoolean());
+                    float cx = city.get("x").asInt() * scale, cy = city.get("y").asInt() * scale;
+                    City c = new City(cx + t.getX(), cy + t.getY(), city.get("major").asBoolean());
 
                     t.setCity(c);
                 }
