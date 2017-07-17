@@ -12,6 +12,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.zelkatani.conquest.Assets;
 import com.zelkatani.conquest.Assets.ConquestLabel;
+import com.zelkatani.conquest.Owner;
+import com.zelkatani.conquest.Player;
 import com.zelkatani.conquest.pathfinding.Contact;
 
 public class Tile extends Actor implements Disposable {
@@ -19,8 +21,10 @@ public class Tile extends Actor implements Disposable {
     private ConquestLabel label;
     private Texture texture;
     private City city;
+    private Owner owner;
 
     private Array<Connection<Tile>> contacts;
+    private Array<Tile> neighbors;
     private int index;
 
     private Rectangle rectangle;
@@ -36,6 +40,7 @@ public class Tile extends Actor implements Disposable {
         setColor(color);
 
         contacts = new Array<>();
+        neighbors = new Array<>();
 
         rectangle = new Rectangle(x, y, width, height);
         texture = new Assets.TileTexture(width, height).getTexture();
@@ -63,7 +68,8 @@ public class Tile extends Actor implements Disposable {
     }
 
     public void update() {
-        troops += 2;
+        if (owner instanceof Player && !((Player) owner).ownsCapital()) return;
+        troops += owner == Owner.None ? 3 : 2;
 
         if (city != null) {
             troops += city.isMajor() ? 5 : 2;
@@ -78,6 +84,10 @@ public class Tile extends Actor implements Disposable {
 
     public void setCity(City city) {
         this.city = city;
+    }
+
+    public City getCity() {
+        return city;
     }
 
     public void setHovered(boolean hovered) {
@@ -112,12 +122,12 @@ public class Tile extends Actor implements Disposable {
         return troops;
     }
 
-    public void addTroops(int value) {
-        troops += value;
+    public void adjustTroops(int troops) {
+        this.troops += troops;
     }
 
-    public void removeTroops(int value) {
-        troops -= value;
+    public void setTroops(int troops) {
+        this.troops = troops;
     }
 
     public void setContacts(Array<Tile> tiles) {
@@ -129,12 +139,17 @@ public class Tile extends Actor implements Disposable {
             if (t == this) continue;
             if (bounds.overlaps(t.getRectangle())) {
                 contacts.add(new Contact(this, t));
+                neighbors.add(t);
             }
         }
     }
 
     public Array<Connection<Tile>> getContacts() {
         return contacts;
+    }
+
+    public Array<Tile> getNeighbors() {
+        return neighbors;
     }
 
     public int getIndex() {
@@ -147,5 +162,20 @@ public class Tile extends Actor implements Disposable {
 
     public ConquestLabel getLabel() {
         return label;
+    }
+
+    public void setOwner(Owner owner) {
+        this.owner = owner;
+        label.setColor(owner.getColor());
+    }
+
+    public Owner getOwner() {
+        return owner;
+    }
+
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        label.setVisible(visible);
     }
 }

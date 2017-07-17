@@ -85,8 +85,12 @@ public class Troop extends Actor implements Disposable {
 
         troopSequence.addAction(Actions.run(() -> {
             Tile last = path.get(path.getCount() - 1);
-            last.addTroops(troops);
-            last.updateLabel();
+            if (last.getOwner() == path.get(0).getOwner()) {
+                last.adjustTroops(troops);
+                last.updateLabel();
+            } else {
+                new Battle(last, path.get(path.getCount() - 2), this);
+            }
         }));
         troopSequence.addAction(Actions.removeActor());
         labelSequence.addAction(Actions.removeActor());
@@ -106,5 +110,19 @@ public class Troop extends Actor implements Disposable {
         float dX = current.getX(Align.center) - next.getX(Align.center);
         float dY = current.getY(Align.center) - next.getY(Align.center);
         return MathUtils.atan2(dY, dX) * MathUtils.radDeg;
+    }
+
+    public int getTroops() {
+        return troops;
+    }
+
+    public void adjustTroops(int troops) {
+        this.troops += troops;
+    }
+
+    @Override
+    public void setColor(Color color) {
+        super.setColor(color);
+        label.setColor(color);
     }
 }

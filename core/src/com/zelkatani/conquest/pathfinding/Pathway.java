@@ -1,11 +1,12 @@
-package com.zelkatani.conquest.entities;
+package com.zelkatani.conquest.pathfinding;
 
 import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 import com.badlogic.gdx.ai.pfa.GraphPath;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
 import com.badlogic.gdx.utils.Array;
-import com.zelkatani.conquest.pathfinding.EuclidianHeuristic;
-import com.zelkatani.conquest.pathfinding.Map;
+import com.zelkatani.conquest.Owner;
+import com.zelkatani.conquest.entities.Tile;
+import com.zelkatani.conquest.entities.Troop;
 
 public class Pathway {
     private Array<Tile> start;
@@ -16,10 +17,10 @@ public class Pathway {
 
     private GraphPath<Tile> graphPath;
 
-    public Pathway(Array<Tile> tiles) {
+    public Pathway(Array<Tile> tiles, Owner owner) {
         start = new Array<>();
 
-        Map map = new Map(tiles.size);
+        Map map = new Map(tiles.size, owner);
         pathFinder = new IndexedAStarPathFinder<>(map);
         heuristic = new EuclidianHeuristic();
 
@@ -68,8 +69,9 @@ public class Pathway {
         boolean found = pathFinder.searchNodePath(current, end, heuristic, graphPath);
 
         if (found) {
-            current.removeTroops(value);
+            current.adjustTroops(-value);
             Troop troop = new Troop(value, graphPath);
+            troop.setColor(current.getOwner().getColor());
             current.getStage().addActor(troop);
             current.updateLabel();
         }

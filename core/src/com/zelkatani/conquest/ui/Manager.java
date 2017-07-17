@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.zelkatani.conquest.Assets;
-import com.zelkatani.conquest.entities.Pathway;
+import com.zelkatani.conquest.pathfinding.Pathway;
 
 public class Manager {
     private Stage stage;

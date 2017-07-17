@@ -9,8 +9,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.zelkatani.conquest.ConquestCamera;
-import com.zelkatani.conquest.entities.Pathway;
+import com.zelkatani.conquest.Player;
 import com.zelkatani.conquest.entities.Tile;
+import com.zelkatani.conquest.pathfinding.Pathway;
 
 public class Grabber extends InputAdapter {
     private enum Mode {
@@ -28,17 +29,19 @@ public class Grabber extends InputAdapter {
 
     private Manager manager;
     private Pathway pathway;
+    private Player player;
 
     private float touchX, touchY, mouseX, mouseY;
     private Mode mode;
 
-    public Grabber(Array<Tile> tiles, ConquestCamera cam, Manager manager, Pathway pathway) {
+    public Grabber(Array<Tile> tiles, ConquestCamera cam, Manager manager, Pathway pathway, Player player) {
         this.tiles = tiles;
         rect = new Rectangle();
         this.cam = cam;
 
         this.manager = manager;
         this.pathway = pathway;
+        this.player = player;
 
         mode = Mode.FIRST;
     }
@@ -70,7 +73,7 @@ public class Grabber extends InputAdapter {
 
         if (rect.width < 10 || rect.height < 10) return;
         for (Tile tile : tiles) {
-            tile.setHovered(rect.contains(tile.getCenter()));
+            tile.setHovered(tile.getOwner() == player && rect.contains(tile.getCenter()));
         }
     }
 
@@ -85,7 +88,7 @@ public class Grabber extends InputAdapter {
     public boolean mouseMoved (int screenX, int screenY) {
         Vector3 vector3 = correct(screenX, screenY);
         for (Tile tile : tiles) {
-            tile.setHovered(tile.getRectangle().contains(vector3.x, vector3.y));
+            tile.setHovered(tile.isVisible() && tile.getRectangle().contains(vector3.x, vector3.y));
         }
 
         return false;
@@ -100,8 +103,11 @@ public class Grabber extends InputAdapter {
 
         boolean any = true;
         for (Tile tile : tiles) {
-            tile.setHovered(false);
-            tile.setSelected(tile.getRectangle().contains(vector3.x, vector3.y));
+            if (!tile.isVisible()) continue;
+            if (tile.getOwner() == player || mode.equals(Mode.SECOND)) {
+                tile.setHovered(false);
+                tile.setSelected(tile.getRectangle().contains(vector3.x, vector3.y));
+            }
             if (tile.isSelected()) {
                 any = false;
                 if (mode.equals(Mode.NONE)) {
@@ -126,7 +132,11 @@ public class Grabber extends InputAdapter {
         Vector3 vector3 = correct(screenX, screenY);
 
         for (Tile tile : tiles) {
-            tile.setSelected(rect.contains(tile.getCenter()) || tile.getRectangle().contains(vector3.x, vector3.y));
+            if (!tile.isVisible()) continue;
+            if (mode == Mode.SECOND || tile.getOwner() == player) {
+                tile.setSelected(rect.contains(tile.getCenter()) || tile.getRectangle().contains(vector3.x, vector3.y));
+            }
+
             if (tile.isSelected()) {
                 selected.add(tile);
             }
@@ -167,6 +177,7 @@ public class Grabber extends InputAdapter {
         mode = Mode.FIRST;
 
         for (Tile tile : tiles) {
+            if (!tile.isVisible() || tile.getOwner() != player) continue;
             tile.setHovered(rect.contains(tile.getCenter()));
         }
         return false;
