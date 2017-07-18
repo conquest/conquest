@@ -29,8 +29,9 @@ public class Tile extends Actor implements Disposable {
 
     private Rectangle rectangle;
 
-    private boolean hovered = false,
-            selected = false;
+    private boolean hovered = false;
+    private boolean selected = false;
+    private boolean hidden = false;
 
     public Tile(float x, float y, int width, int height, Color color) {
         setX(x);
@@ -53,7 +54,9 @@ public class Tile extends Actor implements Disposable {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         Color color = getColor();
-        if (selected) {
+        if (hidden) {
+            color = Color.DARK_GRAY;
+        } else if (selected) {
             color = Assets.select(color);
         } else if (hovered) {
             color = Assets.highlight(color);
@@ -69,7 +72,7 @@ public class Tile extends Actor implements Disposable {
 
     public void update() {
         if (owner instanceof Player && !((Player) owner).ownsCapital()) return;
-        troops += owner == Owner.None ? 3 : 2;
+        troops += owner == Owner.None ? 3 : 1;
 
         if (city != null) {
             troops += city.isMajor() ? 5 : 2;
@@ -177,5 +180,17 @@ public class Tile extends Actor implements Disposable {
     public void setVisible(boolean visible) {
         super.setVisible(visible);
         label.setVisible(visible);
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
+        label.setVisible(!hidden);
+        if (city != null) {
+            city.setVisible(!hidden);
+        }
+    }
+
+    public boolean isHidden() {
+        return hidden;
     }
 }

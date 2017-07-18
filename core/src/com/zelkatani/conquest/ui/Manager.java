@@ -1,6 +1,7 @@
 package com.zelkatani.conquest.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -52,21 +53,31 @@ public class Manager {
 
         partialSendButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                Manager.this.pathway.deselect();
-                Manager.this.pathway.send(numberField.getValue());
-
-                setVisible(false);
+                send();
             }
         });
 
         maxSendButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                Manager.this.pathway.deselect();
-                Manager.this.pathway.sendMax();
-
-                setVisible(false);
+                sendMax();
             }
         });
+
+        stage.addListener(new Macro());
+    }
+
+    private void send() {
+        Manager.this.pathway.deselect();
+        Manager.this.pathway.send(numberField.getValue());
+
+        setVisible(false);
+    }
+
+    private void sendMax() {
+        Manager.this.pathway.deselect();
+        Manager.this.pathway.sendMax();
+
+        setVisible(false);
     }
 
     public void draw() {
@@ -86,5 +97,19 @@ public class Manager {
         numberField.setVisible(visible);
         maxSendButton.setVisible(visible);
         partialSendButton.setVisible(visible);
+    }
+
+    private class Macro extends InputListener {
+        @Override
+        public boolean keyUp(InputEvent event, int keycode) {
+            if (Input.Keys.Q == keycode) {
+                send();
+            }
+            if (Input.Keys.E == keycode) {
+                sendMax();
+            }
+
+            return false;
+        }
     }
 }

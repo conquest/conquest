@@ -41,7 +41,7 @@ public class ConquestCamera extends OrthographicCamera {
         update(true);
     }
 
-    private void handle() {
+    public void handle() {
         if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP)) {
             translate(0, 10);
         }

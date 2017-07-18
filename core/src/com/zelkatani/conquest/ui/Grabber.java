@@ -88,7 +88,7 @@ public class Grabber extends InputAdapter {
     public boolean mouseMoved (int screenX, int screenY) {
         Vector3 vector3 = correct(screenX, screenY);
         for (Tile tile : tiles) {
-            tile.setHovered(tile.isVisible() && tile.getRectangle().contains(vector3.x, vector3.y));
+            tile.setHovered(!tile.isHidden() && tile.getRectangle().contains(vector3.x, vector3.y));
         }
 
         return false;
@@ -103,7 +103,7 @@ public class Grabber extends InputAdapter {
 
         boolean any = true;
         for (Tile tile : tiles) {
-            if (!tile.isVisible()) continue;
+            if (tile.isHidden()) continue;
             if (tile.getOwner() == player || mode.equals(Mode.SECOND)) {
                 tile.setHovered(false);
                 tile.setSelected(tile.getRectangle().contains(vector3.x, vector3.y));
@@ -132,7 +132,7 @@ public class Grabber extends InputAdapter {
         Vector3 vector3 = correct(screenX, screenY);
 
         for (Tile tile : tiles) {
-            if (!tile.isVisible()) continue;
+            if (tile.isHidden()) continue;
             if (mode == Mode.SECOND || tile.getOwner() == player) {
                 tile.setSelected(rect.contains(tile.getCenter()) || tile.getRectangle().contains(vector3.x, vector3.y));
             }
@@ -177,7 +177,7 @@ public class Grabber extends InputAdapter {
         mode = Mode.FIRST;
 
         for (Tile tile : tiles) {
-            if (!tile.isVisible() || tile.getOwner() != player) continue;
+            if (tile.isHidden() || tile.getOwner() != player) continue;
             tile.setHovered(rect.contains(tile.getCenter()));
         }
         return false;
@@ -186,6 +186,7 @@ public class Grabber extends InputAdapter {
     @Override
     public boolean scrolled(int amount) {
         cam.zoom += 0.05 * amount;
+        cam.handle();
         return false;
     }
 }

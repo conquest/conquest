@@ -26,6 +26,8 @@ public class City extends Actor implements Disposable {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        if (!isVisible()) return;
+
         Color color = getColor();
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
         batch.draw(texture, getX() - 10, getY() - 10);

@@ -33,7 +33,7 @@ public class Match implements Disposable {
             t.setOwner(Owner.None);
         }
 
-        Tile random = this.tiles.get(MathUtils.random(this.tiles.size));
+        Tile random = this.tiles.get(MathUtils.random(this.tiles.size - 1));
         player = new Player(Color.GREEN, random);
         cam.position.set(random.getX(Align.center), random.getY(Align.center), 0);
 
@@ -53,14 +53,14 @@ public class Match implements Disposable {
     public void draw() {
         for (Tile tile : tiles) {
             if (tile.getOwner() != player) {
-                tile.setVisible(false);
+                tile.setHidden(true);
             }
         }
 
         for (Tile tile : player.getOwned()) {
             for (Tile neighbor : tile.getNeighbors()) {
                 if (neighbor.getOwner() == player) continue;
-                neighbor.setVisible(true);
+                neighbor.setHidden(false);
             }
         }
 

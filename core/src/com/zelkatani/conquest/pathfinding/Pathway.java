@@ -56,7 +56,7 @@ public class Pathway {
 
     public void send(int value) {
         for (Tile tile : start) {
-            int adjust = tile.getTroops() > value ? value : tile.getTroops() - 1;
+            int adjust = Math.min(tile.getTroops() - 1, value);
             if (adjust == 0 || tile == end) continue;
 
             sendTroop(tile, adjust);
