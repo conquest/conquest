@@ -14,9 +14,8 @@ import com.zelkatani.conquest.pathfinding.Pathway;
 
 public class Manager {
     private Stage stage;
-    private static NumberField numberField = new NumberField("10", Assets.SKIN);
+    private static PartialSendGroup sendGroup = new PartialSendGroup();
     private static TextButton maxSendButton = new TextButton("Send All", Assets.SKIN);
-    private static TextButton partialSendButton = new TextButton("Send", Assets.SKIN);
 
     private Pathway pathway;
 
@@ -28,21 +27,17 @@ public class Manager {
         maxSendButton.setPosition(Gdx.graphics.getWidth() * 2 / 3 - 100, Gdx.graphics.getHeight() / 2 - 50);
         maxSendButton.getLabel().setAlignment(Align.center);
 
-        partialSendButton.setSize(200, 50);
-        partialSendButton.setPosition(Gdx.graphics.getWidth() / 3 - 100, Gdx.graphics.getHeight() / 2 - 50);
-        partialSendButton.getLabel().setAlignment(Align.center);
-
-        stage.addActor(numberField);
         stage.addActor(maxSendButton);
-        stage.addActor(partialSendButton);
+        stage.addActor(sendGroup);
 
         stage.getRoot().addCaptureListener(new InputListener() {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 if (!Manager.isVisible()) return false;
                 if (!(event.getTarget() instanceof NumberField)) stage.setKeyboardFocus(null);
 
-                if (event.getTarget() instanceof Group) {
+                if (event.getTarget() instanceof Group && event.getTarget() != sendGroup) {
                     setVisible(false);
+                    pathway.deselect();
                     return false;
                 }
                 return true;
@@ -51,12 +46,11 @@ public class Manager {
 
         this.pathway = pathway;
 
-        partialSendButton.addListener(new ClickListener() {
+        sendGroup.getSendButton().addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 send();
             }
         });
-
         maxSendButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 sendMax();
@@ -68,7 +62,7 @@ public class Manager {
 
     private void send() {
         Manager.this.pathway.deselect();
-        Manager.this.pathway.send(numberField.getValue());
+        Manager.this.pathway.send(sendGroup.getValue());
 
         setVisible(false);
     }
@@ -90,18 +84,18 @@ public class Manager {
     }
 
     public static boolean isVisible() {
-        return numberField.isVisible() && maxSendButton.isVisible();
+        return sendGroup.isVisible() && maxSendButton.isVisible();
     }
 
     public void setVisible(boolean visible) {
-        numberField.setVisible(visible);
+        sendGroup.setVisible(visible);
         maxSendButton.setVisible(visible);
-        partialSendButton.setVisible(visible);
     }
 
     private class Macro extends InputListener {
         @Override
         public boolean keyUp(InputEvent event, int keycode) {
+            if (!Manager.isVisible()) return false;
             if (Input.Keys.Q == keycode) {
                 send();
             }

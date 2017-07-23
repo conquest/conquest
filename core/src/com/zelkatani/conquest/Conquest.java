@@ -19,5 +19,7 @@ public class Conquest extends Game {
     public void dispose() {
         super.dispose();
         Assets.SKIN.dispose();
+        Assets.ATLAS.dispose();
+        Assets.FOGGY.dispose();
     }
 }

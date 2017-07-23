@@ -6,16 +6,16 @@ filter: Nearest,Nearest
 repeat: none
 base
   rotate: false
-  xy: 164, 22
-  size: 7, 9
+  xy: 163, 20
+  size: 7, 10
   split: 3, 3, 3, 5
   orig: 7, 9
   offset: 0, 0
   index: -1
 base-press
   rotate: false
-  xy: 156, 22
-  size: 7, 9
+  xy: 155, 20
+  size: 7, 10
   split: 3, 3, 3, 5
   orig: 7, 9
   offset: 0, 0
@@ -58,8 +58,8 @@ dot
   index: -1
 field
   rotate: false
-  xy: 172, 22
-  size: 7, 9
+  xy: 171, 20
+  size: 7, 10
   split: 3, 3, 3, 5
   orig: 7, 9
   offset: 0, 0
@@ -74,7 +74,7 @@ knob
 outline
   rotate: false
   xy: 188, 22
-  size: 7, 9
+  size: 7, 10
   split: 3, 3, 3, 5
   orig: 7, 9
   offset: 0, 0
@@ -82,7 +82,7 @@ outline
 outline-press
   rotate: false
   xy: 180, 22
-  size: 7, 9
+  size: 7, 10
   split: 3, 3, 3, 5
   orig: 7, 9
   offset: 0, 0
@@ -210,7 +210,7 @@ tree-plus
   index: -1
 underline
   rotate: false
-  xy: 156, 19
+  xy: 156, 18
   size: 1, 2
   split: 0, 0, 0, 1
   orig: 1, 2

@@ -42,7 +42,7 @@ public class MatchScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.graphics.getGL20().glClearColor(0.22f, 0.22f, 0.22f, 1);
+        Gdx.graphics.getGL20().glClearColor(0.32f, 0.42f, 0.52f, 1);
         Gdx.graphics.getGL20().glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         match.draw();

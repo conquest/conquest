@@ -35,8 +35,9 @@ public class Pathway {
         this.start.addAll(start);
     }
 
-    public void clearStart() {
+    public void clear() {
         start.clear();
+        end = null;
     }
 
     public void setEnd(Tile end) {
@@ -51,7 +52,7 @@ public class Pathway {
             sendTroop(tile, value);
         }
 
-        clearStart();
+        clear();
     }
 
     public void send(int value) {
@@ -62,7 +63,7 @@ public class Pathway {
             sendTroop(tile, adjust);
         }
 
-        clearStart();
+        clear();
     }
 
     private void sendTroop(Tile current, int value) {

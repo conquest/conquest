@@ -13,6 +13,7 @@ import com.zelkatani.conquest.Assets;
 public class Hud {
     private Stage stage;
     private Label timer;
+    private Color background;
 
     private float time;
 
@@ -21,6 +22,8 @@ public class Hud {
 
         timer = new Assets.ConquestLabel(null, 0, 10, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         timer.setAlignment(Align.bottom, Align.center);
+
+        background = Color.valueOf("#626262");
 
         stage.addActor(timer);
 
@@ -38,7 +41,7 @@ public class Hud {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
         renderer.setProjectionMatrix(stage.getCamera().combined);
-        renderer.setColor(new Color(98 / 255f, 98 / 255f, 98 / 255f, 0.5f));
+        renderer.setColor(background);
 
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.rect((Gdx.graphics.getWidth() - 125) / 2, 10, 125, 30);

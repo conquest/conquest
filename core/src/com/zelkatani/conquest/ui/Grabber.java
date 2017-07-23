@@ -117,7 +117,7 @@ public class Grabber extends InputAdapter {
         }
 
         if (any) {
-            pathway.clearStart();
+            pathway.clear();
         }
 
         return false;
@@ -153,12 +153,17 @@ public class Grabber extends InputAdapter {
                 break;
             }
             case SECOND: {
-                for (Tile t : pathway.getStart()) {
-                    t.setSelected(true);
-                }
+                if (pathway.getStart().size != 1 || pathway.getStart().get(0) != selected.get(0)) {
+                    for (Tile t : pathway.getStart()) {
+                        t.setSelected(true);
+                    }
 
-                pathway.setEnd(selected.get(0));
-                manager.setVisible(true);
+                    pathway.setEnd(selected.get(0));
+                    manager.setVisible(true);
+                } else {
+                    pathway.getStart().get(0).setSelected(false);
+                    pathway.clear();
+                }
             }
         }
 
@@ -173,7 +178,7 @@ public class Grabber extends InputAdapter {
 
         if (Math.abs(touchX - mouseX) < 10 || Math.abs(touchY - mouseY) < 10) return false;
 
-        pathway.clearStart();
+        pathway.clear();
         mode = Mode.FIRST;
 
         for (Tile tile : tiles) {

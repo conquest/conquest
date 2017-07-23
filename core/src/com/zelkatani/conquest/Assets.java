@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -17,35 +18,19 @@ public final class Assets {
         public TileTexture(int width, int height) {
             Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
 
-            pixmap.setColor(Color.BLACK);
+            pixmap.setColor(Color.LIGHT_GRAY);
             pixmap.fillRectangle(0, 0, width, height);
 
             pixmap.setColor(Color.WHITE);
             pixmap.fillRectangle(1, 1, width - 2, height - 2);
 
             texture = new Texture(pixmap);
-
             pixmap.dispose();
         }
 
         public Texture getTexture() {
             return texture;
         }
-    }
-
-    public static final Texture CITY;
-    static {
-        Pixmap pixmap = new Pixmap(21, 21, Pixmap.Format.RGBA8888);
-
-        pixmap.setColor(Color.BLACK);
-        pixmap.fillCircle(10, 10, 10);
-
-        pixmap.setColor(Color.WHITE);
-        pixmap.fillCircle(10, 10, 9);
-
-        CITY = new Texture(pixmap);
-
-        pixmap.dispose();
     }
 
     public static final class ConquestLabel extends Label {
@@ -63,18 +48,17 @@ public final class Assets {
         }
     }
 
-    public static final Texture TROOP;
+    static final TextureAtlas ATLAS = new TextureAtlas(Gdx.files.internal("textures/conquest.atlas"));
+    public static final TextureRegion TROOP = ATLAS.findRegion("troop");
+    public static final TextureRegion CITY = ATLAS.findRegion("city");
+    public static final Texture FOGGY;
     static {
-        int width = 40, height = 20;
-        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGB888);
-
-        pixmap.setColor(Color.BLACK);
-        pixmap.fillRectangle(0, 0, width, height);
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
 
         pixmap.setColor(Color.WHITE);
-        pixmap.fillRectangle(1, 1, width - 2, height - 2);
+        pixmap.fillRectangle(0, 0, 1, 1);
 
-        TROOP = new Texture(pixmap);
+        FOGGY = new Texture(pixmap);
 
         pixmap.dispose();
     }
@@ -82,7 +66,6 @@ public final class Assets {
     public static Color highlight(Color color) {
         return color.cpy().mul(1.25f);
     }
-
     public static Color select(Color color) {
         return color.cpy().mul(1.5f);
     }
@@ -91,7 +74,7 @@ public final class Assets {
     static {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Roboto.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 24;
+        parameter.size = 22;
         parameter.borderWidth = 2;
 
         SKIN.add("roboto", generator.generateFont(parameter), BitmapFont.class);

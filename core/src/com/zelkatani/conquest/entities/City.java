@@ -1,14 +1,13 @@
 package com.zelkatani.conquest.entities;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.utils.Disposable;
 import com.zelkatani.conquest.Assets;
 
-public class City extends Actor implements Disposable {
-    private Texture texture;
+public class City extends Actor {
+    private TextureRegion texture;
     private boolean major;
 
     public City(float x, float y, boolean major) {
@@ -35,10 +34,5 @@ public class City extends Actor implements Disposable {
 
     public boolean isMajor() {
         return major;
-    }
-
-    @Override
-    public void dispose() {
-        texture.dispose();
     }
 }

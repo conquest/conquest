@@ -1,0 +1,20 @@
+
+conquest.png
+size: 64,32
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+city
+  rotate: false
+  xy: 40, 1
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+troop
+  rotate: false
+  xy: 0, 0
+  size: 40, 21
+  orig: 40, 21
+  offset: 0, 0
+  index: -1

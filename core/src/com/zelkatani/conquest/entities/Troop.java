@@ -3,8 +3,8 @@ package com.zelkatani.conquest.entities;
 import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 import com.badlogic.gdx.ai.pfa.GraphPath;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -13,14 +13,13 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Disposable;
 import com.zelkatani.conquest.Assets;
 
-public class Troop extends Actor implements Disposable {
+public class Troop extends Actor {
     private int troops;
     private GraphPath<Tile> path;
 
-    private Texture texture;
+    private TextureRegion texture;
     private Label label;
 
     public Troop(int troops, GraphPath<Tile> path) {
@@ -32,7 +31,7 @@ public class Troop extends Actor implements Disposable {
         }
 
         texture = Assets.TROOP;
-        setSize(texture.getWidth(), texture.getHeight());
+        setSize(texture.getRegionWidth(), texture.getRegionHeight());
 
         label = new Assets.ConquestLabel("" + this.troops, getX(), getY(), getWidth(), getHeight());
         label.setAlignment(Align.center, Align.center);
@@ -46,8 +45,7 @@ public class Troop extends Actor implements Disposable {
         Color color = getColor();
 
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-        batch.draw(texture, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), 1, 1, getRotation(), 0, 0, texture.getWidth(), texture.getHeight(), false, false);
-
+        batch.draw(texture, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), 1, 1, getRotation());
         label.draw(batch, parentAlpha);
     }
 
@@ -97,11 +95,6 @@ public class Troop extends Actor implements Disposable {
 
         addAction(troopSequence);
         label.addAction(labelSequence);
-    }
-
-    @Override
-    public void dispose() {
-        texture.dispose();
     }
 
     private float angleToNext(int index) {

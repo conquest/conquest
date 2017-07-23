@@ -63,7 +63,11 @@ public class Tile extends Actor implements Disposable {
         }
 
         batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
-        batch.draw(texture, getX(), getY(), getWidth(), getHeight());
+        if (hidden) {
+            batch.draw(Assets.FOGGY, getX(), getY(), getWidth(), getHeight());
+        } else {
+            batch.draw(texture, getX(), getY(), getWidth(), getHeight());
+        }
 
         if (city != null) {
             city.draw(batch, parentAlpha);
@@ -72,7 +76,7 @@ public class Tile extends Actor implements Disposable {
 
     public void update() {
         if (owner instanceof Player && !((Player) owner).ownsCapital()) return;
-        troops += owner == Owner.None ? 3 : 1;
+        troops += owner != Owner.None ? 3 : 2;
 
         if (city != null) {
             troops += city.isMajor() ? 5 : 2;
@@ -116,9 +120,6 @@ public class Tile extends Actor implements Disposable {
     @Override
     public void dispose() {
         texture.dispose();
-        if (city != null) {
-            city.dispose();
-        }
     }
 
     public int getTroops() {

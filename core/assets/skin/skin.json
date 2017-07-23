@@ -3,23 +3,22 @@
     default: { file: com/badlogic/gdx/utils/arial-15.fnt }
   },
   com.badlogic.gdx.graphics.Color: {
-    white: { r: 1, g: 1, b: 1, a: 1 },
-    gray: { r: 0.5, g: 0.5, b: 0.5, a: 1 },
-    black: { r: 0, g: 0, b: 0, a: 1 },
-    
-    up: { r: 0.6, g: 0.6, b: 0.6, a: 1 },
-    down: { r: 0.5, g: 0.5, b: 0.5, a: 1 },
-    over: { r: 0, g: 0.3, b: 0.5, a: 1 },
-    disabled: { r: 0.1, g: 0.1, b: 0.1, a: 1 },
-    background: { r: 0.8, g: 0.8, b: 0.8, a: 1 },
-    selection: { r: 0.725, g: 0.85, b: 1, a: 1 },
+    white: { r: 1, g: 1, b: 1 },
+    gray: { r: 0.5, g: 0.5, b: 0.5 },
+    black: { r: 0, g: 0, b: 0 },
+    up: { r: 0.7383, g: 0.7695, b: 0.7930 },
+    down: { r: 0.375, g: 0.375, b: 0.375 },
+    over: gray,
+    disabled: { r: 0.1328, g: 0.1367, b: 0.1484 },
+    background: { r: 0.8, g: 0.8, b: 0.8 },
+    selection: { r: 0.3555, g: 0.5117, b: 0.6484 },
     semiTransparent: { r: 0, g: 0, b: 0, a: 0.6 },
     
     font: white
-    fontOver: white
-    fontDown: white
-    fontChecked: down
-    fontCheckedOver: over
+    fontOver: font
+    fontDown: font
+    fontChecked: font
+    fontCheckedOver: font
     fontDisabled: gray
   },
   com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
@@ -73,9 +72,9 @@
     sliderVerticalKnobDown: { name: check-square, color: down },
     sliderVerticalKnobDisabled: { name: check-square, color: disabled },
     textField: { name: field, color: up },
-    textFieldDown: { name: field, color: background },
+    textFieldDown: { name: field, color: up },
     textFieldDisabled: { name: field, color: disabled },
-    textFieldCursor: { name: cursor, color: font },
+    textFieldCursor: { name: cursor, color: selection },
     tooltip: { name: outline-press, color: background },
     touchpad: { name: outline, color: background },
     touchpadKnob: { name: radio-off, color: down },
