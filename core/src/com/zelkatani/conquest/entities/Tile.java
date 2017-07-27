@@ -7,16 +7,14 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.*;
 import com.zelkatani.conquest.Assets;
 import com.zelkatani.conquest.Assets.ConquestLabel;
 import com.zelkatani.conquest.Owner;
 import com.zelkatani.conquest.Player;
 import com.zelkatani.conquest.pathfinding.Contact;
 
-public class Tile extends Actor implements Disposable {
+public class Tile extends Actor implements Disposable, Json.Serializable {
     private int troops;
     private ConquestLabel label;
     private Texture texture;
@@ -193,5 +191,16 @@ public class Tile extends Actor implements Disposable {
 
     public boolean isHidden() {
         return hidden;
+    }
+
+    @Override
+    public void write(Json json) {
+        json.writeValue("index", index);
+        json.writeValue("owner", owner.getId());
+        json.writeValue("troops", troops);
+    }
+
+    @Override
+    public void read(Json json, JsonValue jsonData) {
     }
 }

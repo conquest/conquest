@@ -2,18 +2,18 @@ package com.zelkatani.conquest;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.zelkatani.conquest.entities.City;
 import com.zelkatani.conquest.entities.Tile;
+import com.zelkatani.conquest.multiplayer.SerialArray;
 
 public class Level {
-    private Array<Tile> tiles;
+    private SerialArray<Tile> tiles;
 
     public Level() {
         JsonReader reader = new JsonReader();
-        tiles = new Array<>();
+        tiles = new SerialArray<>();
 
         JsonValue value = reader.parse(Gdx.files.internal("maps/new-york.json"));
         JsonValue regions = value.get("regions");
@@ -45,7 +45,7 @@ public class Level {
         }
     }
 
-    public Array<Tile> getTiles() {
+    public SerialArray<Tile> getTiles() {
         return tiles;
     }
 }

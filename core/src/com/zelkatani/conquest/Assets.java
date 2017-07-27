@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
@@ -68,6 +69,9 @@ public final class Assets {
     }
     public static Color select(Color color) {
         return color.cpy().mul(1.5f);
+    }
+    public static Color random() {
+        return new Color(MathUtils.random(), MathUtils.random(), MathUtils.random(), 1);
     }
 
     public static final Skin SKIN = new Skin();

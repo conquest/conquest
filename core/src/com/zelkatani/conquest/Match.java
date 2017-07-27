@@ -1,7 +1,6 @@
 package com.zelkatani.conquest;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -11,15 +10,19 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.zelkatani.conquest.entities.Tile;
+import com.zelkatani.conquest.multiplayer.Client;
+import com.zelkatani.conquest.multiplayer.SerialArray;
 
 public class Match implements Disposable {
     private ConquestCamera cam;
     private Stage stage;
+
+    private Client client;
     private Player player;
 
-    private Array<Tile> tiles;
+    private SerialArray<Tile> tiles;
 
-    public Match(Array<Tile> tiles) {
+    public Match(SerialArray<Tile> tiles) {
         cam = new ConquestCamera(tiles);
         stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), cam));
 
@@ -34,7 +37,10 @@ public class Match implements Disposable {
         }
 
         Tile random = this.tiles.get(MathUtils.random(this.tiles.size - 1));
-        player = new Player(Color.GREEN, random);
+
+        player = new Player(Assets.random(), random);
+        client = new Client(player, tiles);
+
         cam.position.set(random.getX(Align.center), random.getY(Align.center), 0);
 
         stage.addActor(tileGroup);
@@ -63,6 +69,8 @@ public class Match implements Disposable {
                 neighbor.setHidden(false);
             }
         }
+
+        client.update();
 
         stage.act();
         stage.draw();
