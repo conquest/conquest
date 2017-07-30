@@ -68,10 +68,10 @@ public final class Assets {
         return color.cpy().mul(1.25f);
     }
     public static Color select(Color color) {
-        return color.cpy().mul(1.5f);
+        return color.cpy().mul(1.75f);
     }
     public static Color random() {
-        return new Color(MathUtils.random(), MathUtils.random(), MathUtils.random(), 1);
+        return new Color(MathUtils.random(0.25f, 1), MathUtils.random(0.25f, 1), MathUtils.random(0.25f, 1), 1);
     }
 
     public static final Skin SKIN = new Skin();

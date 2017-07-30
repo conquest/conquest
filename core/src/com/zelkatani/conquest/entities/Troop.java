@@ -11,16 +11,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.zelkatani.conquest.Assets;
+import com.zelkatani.conquest.Assets.ConquestLabel;
 
 public class Troop extends Actor {
     private int troops;
     private GraphPath<Tile> path;
 
     private TextureRegion texture;
-    private Label label;
+    private ConquestLabel label;
 
     public Troop(int troops, GraphPath<Tile> path) {
         this.troops = troops;
@@ -33,7 +33,8 @@ public class Troop extends Actor {
         texture = Assets.TROOP;
         setSize(texture.getRegionWidth(), texture.getRegionHeight());
 
-        label = new Assets.ConquestLabel("" + this.troops, getX(), getY(), getWidth(), getHeight());
+        label = new ConquestLabel("", getX(), getY(), getWidth(), getHeight());
+        label.setText(this.troops);
         label.setAlignment(Align.center, Align.center);
 
         setOrigin(Align.center);
@@ -85,7 +86,6 @@ public class Troop extends Actor {
             Tile last = path.get(path.getCount() - 1);
             if (last.getOwner() == path.get(0).getOwner()) {
                 last.adjustTroops(troops);
-                last.updateLabel();
             } else {
                 new Battle(last, path.get(path.getCount() - 2), this);
             }

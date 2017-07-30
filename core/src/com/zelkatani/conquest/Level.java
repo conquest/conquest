@@ -17,20 +17,20 @@ public class Level {
 
         JsonValue value = reader.parse(Gdx.files.internal("maps/new-york.json"));
         JsonValue regions = value.get("regions");
-        float scale = value.get("scale").asFloat();
+        float scale = value.getFloat("scale");
 
         for (JsonValue region : regions) {
-            Color color = Color.valueOf(region.get("color").asString());
+            Color color = Color.valueOf(region.getString("color"));
 
             for (JsonValue tile : region.get("tiles")) {
-                int x = tile.get("x").asInt(), y = tile.get("y").asInt();
-                int width = tile.get("w").asInt(), height = tile.get("h").asInt();
+                int x = tile.getInt("x"), y = tile.getInt("y");
+                int width = tile.getInt("w"), height = tile.getInt("h");
                 Tile t = new Tile(x * scale, y * scale, (int) (width * scale), (int) (height * scale), color);
 
                 if (tile.get("city") != null) {
                     JsonValue city = tile.get("city");
-                    float cx = city.get("x").asInt() * scale, cy = city.get("y").asInt() * scale;
-                    City c = new City(cx + t.getX(), cy + t.getY(), city.get("major").asBoolean());
+                    float cx = city.getInt("x") * scale, cy = city.getInt("y") * scale;
+                    City c = new City(cx + t.getX(), cy + t.getY(), city.getBoolean("major"));
 
                     t.setCity(c);
                 }

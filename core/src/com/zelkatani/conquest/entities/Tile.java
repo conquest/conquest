@@ -47,6 +47,8 @@ public class Tile extends Actor implements Disposable, Json.Serializable {
 
         label = new ConquestLabel("" + troops, x, y, width, height);
         label.setAlignment(Align.center, Align.center);
+
+        owner = Owner.None;
     }
 
     @Override
@@ -83,7 +85,7 @@ public class Tile extends Actor implements Disposable, Json.Serializable {
         updateLabel();
     }
 
-    public void updateLabel() {
+    private void updateLabel() {
         label.setText(troops);
     }
 
@@ -126,10 +128,12 @@ public class Tile extends Actor implements Disposable, Json.Serializable {
 
     public void adjustTroops(int troops) {
         this.troops += troops;
+        updateLabel();
     }
 
     public void setTroops(int troops) {
         this.troops = troops;
+        updateLabel();
     }
 
     public void setContacts(Array<Tile> tiles) {
@@ -166,9 +170,15 @@ public class Tile extends Actor implements Disposable, Json.Serializable {
         return label;
     }
 
-    public void setOwner(Owner owner) {
-        this.owner = owner;
+    public void setOwner(Player player) {
+        if (owner instanceof Player) {
+            ((Player) owner).remove(this);
+        }
+        this.owner = player;
         label.setColor(owner.getColor());
+        if (owner != Owner.None) {
+            setColor(owner.getColor());
+        }
     }
 
     public Owner getOwner() {
@@ -202,5 +212,10 @@ public class Tile extends Actor implements Disposable, Json.Serializable {
 
     @Override
     public void read(Json json, JsonValue jsonData) {
+        int troops = jsonData.getInt("troops");
+        int id = jsonData.getInt("owner");
+        if (id != 0 && this.troops != troops) {
+            setTroops(troops);
+        }
     }
 }

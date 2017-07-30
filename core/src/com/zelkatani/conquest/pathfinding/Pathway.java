@@ -74,7 +74,6 @@ public class Pathway {
             Troop troop = new Troop(value, graphPath);
             troop.setColor(current.getOwner().getColor());
             current.getStage().addActor(troop);
-            current.updateLabel();
         }
         graphPath.clear();
     }

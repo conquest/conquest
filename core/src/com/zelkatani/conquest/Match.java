@@ -33,7 +33,6 @@ public class Match implements Disposable {
         for (Tile t : this.tiles) {
             tileGroup.addActor(t);
             labelGroup.addActor(t.getLabel());
-            t.setOwner(Owner.None);
         }
 
         Tile random = this.tiles.get(MathUtils.random(this.tiles.size - 1));
@@ -71,7 +70,6 @@ public class Match implements Disposable {
         }
 
         client.update();
-
         stage.act();
         stage.draw();
     }

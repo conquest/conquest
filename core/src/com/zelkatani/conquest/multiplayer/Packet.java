@@ -13,7 +13,7 @@ public class Packet implements Json.Serializable {
         this.player = player;
         this.tiles = new SerialArray<>();
         for (Tile tile : tiles) {
-            if (!tile.isHidden()) {
+            if (!tile.isHidden() && (tile.getOwner() instanceof Player && tile.getOwner() == player)) {
                 this.tiles.add(tile);
             }
         }

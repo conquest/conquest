@@ -26,7 +26,6 @@ public class Player extends Owner implements Json.Serializable {
             }
         }
         capital.setTroops(sum);
-        capital.updateLabel();
     }
 
     public boolean ownsCapital() {
@@ -41,11 +40,16 @@ public class Player extends Owner implements Json.Serializable {
         owned.add(tile);
     }
 
+    public void remove(Tile tile) {
+        owned.removeValue(tile, true);
+    }
+
     @Override
     public void write(Json json) {
         json.writeObjectStart("player");
         json.writeValue("id", getId());
         json.writeValue("color", getColor().toString());
+        json.writeValue("capital", capital);
         json.writeObjectEnd();
     }
 

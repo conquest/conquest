@@ -18,9 +18,8 @@ public class Battle {
             if (this.attacker.getOwner() instanceof Player) {
                 ((Player) this.attacker.getOwner()).add(this.defender);
             }
-            this.defender.setOwner(this.attacker.getOwner());
+            this.defender.setOwner((Player) this.attacker.getOwner());
             this.defender.setTroops(this.troop.getTroops());
-            this.defender.updateLabel();
         }
     }
 
@@ -28,6 +27,5 @@ public class Battle {
         int pre = defender.getTroops();
         defender.adjustTroops(-troop.getTroops());
         troop.adjustTroops(-pre);
-        defender.updateLabel();
     }
 }

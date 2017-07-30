@@ -4,14 +4,16 @@ import com.badlogic.gdx.graphics.Color;
 
 public class Owner {
     private Color color;
-    private static int total = 0;
     private int id;
 
-    public static Owner None = new Owner(Color.WHITE);
+    public static final Owner None = new Owner(Color.WHITE);
+    static {
+        None.id = 0;
+    }
 
     public Owner(Color color) {
         this.color = color;
-        id = total++;
+        id = 1;
     }
 
     public Color getColor() {
@@ -20,5 +22,9 @@ public class Owner {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
