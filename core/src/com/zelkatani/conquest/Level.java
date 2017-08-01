@@ -1,6 +1,5 @@
 package com.zelkatani.conquest;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
@@ -9,15 +8,14 @@ import com.zelkatani.conquest.entities.Tile;
 import com.zelkatani.conquest.multiplayer.SerialArray;
 
 public class Level {
-    private SerialArray<Tile> tiles;
+    private static JsonReader reader = new JsonReader();
 
-    public Level() {
-        JsonReader reader = new JsonReader();
-        tiles = new SerialArray<>();
-
-        JsonValue value = reader.parse(Gdx.files.internal("maps/new-york.json"));
-        JsonValue regions = value.get("regions");
+    public static SerialArray<Tile> load(String map) {
+        JsonValue value = reader.parse(map);
         float scale = value.getFloat("scale");
+        JsonValue regions = value.get("regions");
+
+        SerialArray<Tile> tiles = new SerialArray<>();
 
         for (JsonValue region : regions) {
             Color color = Color.valueOf(region.getString("color"));
@@ -26,6 +24,8 @@ public class Level {
                 int x = tile.getInt("x"), y = tile.getInt("y");
                 int width = tile.getInt("w"), height = tile.getInt("h");
                 Tile t = new Tile(x * scale, y * scale, (int) (width * scale), (int) (height * scale), color);
+                t.setRegion(region.name);
+                t.setTroops(tile.getInt("troops"));
 
                 if (tile.get("city") != null) {
                     JsonValue city = tile.get("city");
@@ -35,17 +35,15 @@ public class Level {
                     t.setCity(c);
                 }
 
+                t.setIndex(tile.getInt("index"));
                 tiles.add(t);
             }
         }
 
         for (int i = 0; i < tiles.size; i++) {
             tiles.get(i).setContacts(tiles);
-            tiles.get(i).setIndex(i);
         }
-    }
 
-    public SerialArray<Tile> getTiles() {
         return tiles;
     }
 }

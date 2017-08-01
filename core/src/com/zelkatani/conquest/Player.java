@@ -10,11 +10,19 @@ public class Player extends Owner implements Json.Serializable {
     private SerialArray<Tile> owned;
     private Tile capital;
 
-    public Player(Color color, Tile capital) {
+    public Player(Color color) {
         super(color);
-        this.capital = capital;
 
         owned = new SerialArray<>();
+    }
+
+    public Player(Color color, Tile capital) {
+        this(color);
+        setCapital(capital);
+    }
+
+    public void setCapital(Tile capital) {
+        this.capital = capital;
         capital.setOwner(this);
         owned.add(capital);
 

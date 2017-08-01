@@ -31,6 +31,8 @@ public class Tile extends Actor implements Disposable, Json.Serializable {
     private boolean selected = false;
     private boolean hidden = false;
 
+    private String region;
+
     public Tile(float x, float y, int width, int height, Color color) {
         setX(x);
         setY(y);
@@ -42,13 +44,13 @@ public class Tile extends Actor implements Disposable, Json.Serializable {
         neighbors = new Array<>();
 
         rectangle = new Rectangle(x, y, width, height);
-        texture = new Assets.TileTexture(width, height).getTexture();
-        troops = 1;
+        troops = 0;
 
         label = new ConquestLabel("" + troops, x, y, width, height);
         label.setAlignment(Align.center, Align.center);
 
         owner = Owner.None;
+        region = "";
     }
 
     @Override
@@ -205,6 +207,7 @@ public class Tile extends Actor implements Disposable, Json.Serializable {
 
     @Override
     public void write(Json json) {
+        json.writeValue("region", region);
         json.writeValue("index", index);
         json.writeValue("owner", owner.getId());
         json.writeValue("troops", troops);
@@ -217,5 +220,13 @@ public class Tile extends Actor implements Disposable, Json.Serializable {
         if (id != 0 && this.troops != troops) {
             setTroops(troops);
         }
+    }
+
+    public void setTexture() {
+        texture = new Assets.TileTexture((int) getWidth(), (int) getHeight()).getTexture();
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
     }
 }

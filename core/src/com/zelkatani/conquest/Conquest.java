@@ -1,18 +1,16 @@
 package com.zelkatani.conquest;
 
 import com.badlogic.gdx.Game;
-import com.zelkatani.conquest.screens.MatchScreen;
+import com.zelkatani.conquest.multiplayer.Client;
 
 public class Conquest extends Game {
-    private Match match;
-    private Level level;
+    private Player player;
+    private Client client;
 
     @Override
     public void create() {
-        level = new Level();
-        match = new Match(level.getTiles());
-
-        setScreen(new MatchScreen(match));
+        player = new Player(Assets.random());
+        client = new Client(this, player);
     }
 
     @Override
