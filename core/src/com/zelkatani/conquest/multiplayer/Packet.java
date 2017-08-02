@@ -12,8 +12,10 @@ public class Packet implements Json.Serializable {
     public Packet(Player player, SerialArray<Tile> tiles) {
         this.player = player;
         this.tiles = new SerialArray<>();
+        this.tiles.addAll(player.getOwned());
+
         for (Tile tile : tiles) {
-            if (!tile.isHidden() && (tile.getOwner() instanceof Player && tile.getOwner() == player)) {
+            if (tile.isAttacked()) {
                 this.tiles.add(tile);
             }
         }

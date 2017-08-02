@@ -78,5 +78,6 @@ public class MatchScreen implements Screen {
     public void dispose() {
         renderer.dispose();
         batch.dispose();
+        match.dispose();
     }
 }

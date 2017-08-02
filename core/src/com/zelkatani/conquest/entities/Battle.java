@@ -10,6 +10,7 @@ public class Battle {
 
     public Battle(Tile defender, Tile attacker, Troop troop) {
         this.defender = defender;
+        this.defender.setAttacked(true);
         this.attacker = attacker;
         this.troop = troop;
 

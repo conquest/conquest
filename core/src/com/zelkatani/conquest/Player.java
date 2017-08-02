@@ -63,6 +63,5 @@ public class Player extends Owner implements Json.Serializable {
 
     @Override
     public void read(Json json, JsonValue jsonData) {
-
     }
 }

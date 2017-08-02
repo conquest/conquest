@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.zelkatani.conquest.entities.Tile;
 import com.zelkatani.conquest.multiplayer.Client;
@@ -44,6 +45,13 @@ public class Match implements Disposable {
 
         stage.addActor(tileGroup);
         stage.addActor(labelGroup);
+
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                client.send();
+            }
+        }, 0.1f, 0.01f);
     }
 
     public void draw() {
@@ -60,16 +68,8 @@ public class Match implements Disposable {
             }
         }
 
-        client.send();
         stage.act();
         stage.draw();
-    }
-
-    @Override
-    public void dispose() {
-        for (Tile t : tiles) {
-            t.dispose();
-        }
     }
 
     public Array<Tile> getTiles() {
@@ -86,5 +86,13 @@ public class Match implements Disposable {
 
     public Player getPlayer() {
         return player;
+    }
+
+    @Override
+    public void dispose() {
+        for (Tile t : tiles) {
+            t.dispose();
+        }
+        stage.dispose();
     }
 }

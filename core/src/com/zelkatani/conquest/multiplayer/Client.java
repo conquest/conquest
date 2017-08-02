@@ -3,7 +3,10 @@ package com.zelkatani.conquest.multiplayer;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.utils.*;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.JsonWriter;
+import com.badlogic.gdx.utils.SerializationException;
 import com.zelkatani.conquest.Level;
 import com.zelkatani.conquest.Match;
 import com.zelkatani.conquest.Player;
@@ -16,6 +19,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.HashMap;
 
 public class Client {
     private Socket socket;
@@ -25,14 +29,15 @@ public class Client {
     private Json json;
     private SerialArray<Tile> map;
 
-    private Array<Player> players;
+    private HashMap<Integer, Player> players;
     private Player player;
 
     private Game game;
 
+    // TODO pvp syncing
     public Client(Game game, Player player) {
         this.game = game;
-        players = new Array<>();
+        players = new HashMap<>();
         this.player = player;
 
         json = new Json(JsonWriter.OutputType.json);
@@ -53,25 +58,31 @@ public class Client {
                     Client.this.player.setId(jsonData.getInt("id"));
                     return null;
                 } else {
-                    if (!containsPlayer(player.getInt("id"))) {
+                    if (players.get(player.getInt("id")) == null) {
                         Tile cap = map.get(player.get("capital").getInt("index"));
                         String color = player.getString("color");
 
                         Player opponent = new Player(Color.valueOf(color), cap);
                         opponent.setId(player.getInt("id"));
-                        players.add(opponent);
+                        players.put(opponent.getId(), opponent);
                     }
                 }
 
                 for (JsonValue tile : tiles) {
                     Tile t = map.get(tile.getInt("index"));
-                    for (Player p : players) {
-                        if (p.getId() == tile.getInt("owner")) {
-                            t.setOwner(p);
-                            break;
-                        }
+                    if (tile.getInt("owner") == 0) {
+                        t.setTroops(tile.getInt("troops"));
+                        continue;
                     }
-                    t.read(json, tile);
+
+                    Player p = players.get(tile.getInt("owner"));
+                    if (t.getOwner() == Client.this.player && t.isAttacked()) {
+                        continue;
+                    } else if (p != null) {
+                        t.setOwner(p);
+                        p.add(t);
+                    }
+                    t.setTroops(tile.getInt("troops"));
                 }
                 return null;
             }
@@ -87,13 +98,6 @@ public class Client {
 
         Thread receiveThread = new Thread(this::receive);
         receiveThread.start();
-    }
-
-    private boolean containsPlayer(int id) {
-        for (Player player : players) {
-            if (player.getId() == id) return true;
-        }
-        return false;
     }
 
     public void send() {
@@ -114,6 +118,7 @@ public class Client {
                 } catch (SerializationException | IllegalArgumentException e) {
                     try {
                         map = Level.load(str);
+                        map.sort();
                         Gdx.app.postRunnable(() ->
                                 game.setScreen(new MatchScreen(new Match(Client.this, player)))
                         );

@@ -14,7 +14,7 @@ import com.zelkatani.conquest.Owner;
 import com.zelkatani.conquest.Player;
 import com.zelkatani.conquest.pathfinding.Contact;
 
-public class Tile extends Actor implements Disposable, Json.Serializable {
+public class Tile extends Actor implements Disposable, Json.Serializable, Comparable<Tile> {
     private int troops;
     private ConquestLabel label;
     private Texture texture;
@@ -30,6 +30,7 @@ public class Tile extends Actor implements Disposable, Json.Serializable {
     private boolean hovered = false;
     private boolean selected = false;
     private boolean hidden = false;
+    private boolean attacked = false;
 
     private String region;
 
@@ -176,7 +177,8 @@ public class Tile extends Actor implements Disposable, Json.Serializable {
         if (owner instanceof Player) {
             ((Player) owner).remove(this);
         }
-        this.owner = player;
+
+        owner = player;
         label.setColor(owner.getColor());
         if (owner != Owner.None) {
             setColor(owner.getColor());
@@ -215,11 +217,6 @@ public class Tile extends Actor implements Disposable, Json.Serializable {
 
     @Override
     public void read(Json json, JsonValue jsonData) {
-        int troops = jsonData.getInt("troops");
-        int id = jsonData.getInt("owner");
-        if (id != 0 && this.troops != troops) {
-            setTroops(troops);
-        }
     }
 
     public void setTexture() {
@@ -228,5 +225,18 @@ public class Tile extends Actor implements Disposable, Json.Serializable {
 
     public void setRegion(String region) {
         this.region = region;
+    }
+
+    public void setAttacked(boolean attacked) {
+        this.attacked = attacked;
+    }
+
+    public boolean isAttacked() {
+        return attacked;
+    }
+
+    @Override
+    public int compareTo(Tile t) {
+        return Integer.compare(index, t.getIndex());
     }
 }
