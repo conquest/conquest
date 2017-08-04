@@ -32,11 +32,8 @@ public class Client {
     private HashMap<Integer, Player> players;
     private Player player;
 
-    private Game game;
-
     // TODO pvp syncing
-    public Client(Game game, Player player) {
-        this.game = game;
+    public Client(Player player) {
         players = new HashMap<>();
         this.player = player;
 
@@ -87,14 +84,12 @@ public class Client {
                 return null;
             }
         });
+    }
 
-        try {
-            socket = new Socket("", 8080);
-            outputStream = new DataOutputStream(socket.getOutputStream());
-            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        } catch (IOException io) {
-            io.printStackTrace();
-        }
+    public void connect(String host) throws IOException {
+        socket = new Socket(host, 8080);
+        outputStream = new DataOutputStream(socket.getOutputStream());
+        reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
         Thread receiveThread = new Thread(this::receive);
         receiveThread.start();
@@ -119,9 +114,10 @@ public class Client {
                     try {
                         map = Level.load(str);
                         map.sort();
-                        Gdx.app.postRunnable(() ->
-                                game.setScreen(new MatchScreen(new Match(Client.this, player)))
-                        );
+                        Gdx.app.postRunnable(() -> {
+                            MatchScreen matchScreen = new MatchScreen(new Match(Client.this, player));
+                            ((Game) Gdx.app.getApplicationListener()).setScreen(matchScreen);
+                        });
                     } catch (Exception e2) {
                         if (str.equals("refresh")) {
                             for (int i = 0; i < map.size; i++) {

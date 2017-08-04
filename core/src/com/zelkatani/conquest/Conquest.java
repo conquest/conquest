@@ -1,16 +1,15 @@
 package com.zelkatani.conquest;
 
 import com.badlogic.gdx.Game;
-import com.zelkatani.conquest.multiplayer.Client;
+import com.zelkatani.conquest.screens.MainMenu;
 
 public class Conquest extends Game {
-    private Player player;
-    private Client client;
+    MainMenu menu;
 
     @Override
     public void create() {
-        player = new Player(Assets.random());
-        client = new Client(this, player);
+        menu = new MainMenu();
+        setScreen(menu);
     }
 
     @Override
@@ -19,5 +18,8 @@ public class Conquest extends Game {
         Assets.SKIN.dispose();
         Assets.ATLAS.dispose();
         Assets.FOGGY.dispose();
+        Assets.LOGO.dispose();
+
+        menu.dispose();
     }
 }

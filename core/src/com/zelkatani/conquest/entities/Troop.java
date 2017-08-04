@@ -33,9 +33,7 @@ public class Troop extends Actor {
         texture = Assets.TROOP;
         setSize(texture.getRegionWidth(), texture.getRegionHeight());
 
-        label = new ConquestLabel("", getX(), getY(), getWidth(), getHeight());
-        label.setText(this.troops);
-        label.setAlignment(Align.center, Align.center);
+        label = new ConquestLabel(this.troops, getX(), getY(), getWidth(), getHeight());
 
         setOrigin(Align.center);
         createActions();

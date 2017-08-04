@@ -7,7 +7,10 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.utils.*;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 import com.zelkatani.conquest.Assets;
 import com.zelkatani.conquest.Assets.ConquestLabel;
 import com.zelkatani.conquest.Owner;
@@ -47,8 +50,7 @@ public class Tile extends Actor implements Disposable, Json.Serializable, Compar
         rectangle = new Rectangle(x, y, width, height);
         troops = 0;
 
-        label = new ConquestLabel("" + troops, x, y, width, height);
-        label.setAlignment(Align.center, Align.center);
+        label = new ConquestLabel(troops, x, y, width, height);
 
         owner = Owner.None;
         region = "";

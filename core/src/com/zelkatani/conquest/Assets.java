@@ -11,8 +11,11 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Align;
 
 public final class Assets {
+    public static final Texture LOGO = new Texture(Gdx.files.internal("textures/logo.png"));
+
     public static final class TileTexture {
         private Texture texture;
 
@@ -37,7 +40,17 @@ public final class Assets {
     public static final class ConquestLabel extends Label {
         public ConquestLabel(String text, float x, float y, float width, float height) {
             super(text, Assets.SKIN);
+            setAlignment(Align.center, Align.center);
             setBounds(x, y, width, height);
+        }
+
+        public ConquestLabel(String text, float x, float y) {
+            this(text, x, y, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        }
+
+        public ConquestLabel(int number, float x, float y, float width, float height) {
+            this(null, x, y, width, height);
+            setText(number);
         }
 
         public void setText(int number) {

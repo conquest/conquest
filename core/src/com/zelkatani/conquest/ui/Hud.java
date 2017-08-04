@@ -10,14 +10,14 @@ import com.zelkatani.conquest.Assets.ConquestLabel;
 
 public class Hud {
     private Stage stage;
-    private static ConquestLabel timer = new ConquestLabel("00:00", 0, 10, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    private static ConquestLabel timer = new ConquestLabel("00:00", 0, 12.5f);
     private Color background;
 
     public Hud() {
         stage = new Stage();
-        timer.setAlignment(Align.bottom, Align.center);
 
         background = Color.valueOf("#626262");
+        timer.setAlignment(Align.bottom, Align.center);
 
         stage.addActor(timer);
     }
