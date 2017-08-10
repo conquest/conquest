@@ -2,7 +2,6 @@ package com.zelkatani.conquest.entities;
 
 import com.zelkatani.conquest.Player;
 
-// TODO battle display, battles happen over time rather than end instantly
 public class Battle {
     private Tile defender;
     private Tile attacker;

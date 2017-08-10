@@ -31,7 +31,7 @@ public class PlayGroup extends Group {
 
         hostLabel = new ConquestLabel("Host:", host.getX() - 75, host.getY() - 5, 50, 50);
 
-        server = new ConquestLabel("Failed to connect.", play.getX(), host.getY() + 75, 100, 1);
+        server = new ConquestLabel("Failed to connect.", play.getX(), host.getY() + 75, 200, 1);
         server.setVisible(false);
 
         play.addCaptureListener(new ClickListener() {

@@ -10,12 +10,25 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.zelkatani.conquest.Assets;
+import com.zelkatani.conquest.Assets.ConquestLabel;
 import com.zelkatani.conquest.pathfinding.Pathway;
 
 public class Manager {
     private Stage stage;
-    private static PartialSendGroup sendGroup = new PartialSendGroup();
-    private static TextButton maxSendButton = new TextButton("Send All", Assets.SKIN);
+    private static PartialSendGroup sendGroup;
+    private static TextButton maxSendButton;
+    private static ConquestLabel maxLabel;
+
+    static {
+        sendGroup = new PartialSendGroup();
+
+        maxSendButton = new TextButton("Send All", Assets.SKIN);
+        maxSendButton.setSize(200,100);
+        maxSendButton.setPosition(Gdx.graphics.getWidth() * 2 / 3 - 100, Gdx.graphics.getHeight() / 2 - 50);
+        maxSendButton.getLabel().setAlignment(Align.center);
+
+        maxLabel = new ConquestLabel("Press E to send", maxSendButton.getX(), sendGroup.getLabelY(), 200, 1);
+    }
 
     private Pathway pathway;
 
@@ -23,11 +36,8 @@ public class Manager {
         setVisible(false);
         stage = new Stage();
 
-        maxSendButton.setSize(200,100);
-        maxSendButton.setPosition(Gdx.graphics.getWidth() * 2 / 3 - 100, Gdx.graphics.getHeight() / 2 - 50);
-        maxSendButton.getLabel().setAlignment(Align.center);
-
         stage.addActor(maxSendButton);
+        stage.addActor(maxLabel);
         stage.addActor(sendGroup);
 
         stage.getRoot().addCaptureListener(new InputListener() {
@@ -90,6 +100,7 @@ public class Manager {
     public void setVisible(boolean visible) {
         sendGroup.setVisible(visible);
         maxSendButton.setVisible(visible);
+        maxLabel.setVisible(visible);
     }
 
     private class Macro extends InputListener {

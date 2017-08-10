@@ -7,10 +7,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.zelkatani.conquest.Assets;
+import com.zelkatani.conquest.Assets.ConquestLabel;
 
 class PartialSendGroup extends Group {
     private NumberField numberField;
     private TextButton sendButton;
+    private ConquestLabel label;
 
     PartialSendGroup() {
         numberField = new NumberField("10", Assets.SKIN);
@@ -41,10 +43,13 @@ class PartialSendGroup extends Group {
         sendButton.setPosition(Gdx.graphics.getWidth() / 3 - 100, Gdx.graphics.getHeight() / 2 - 50);
         sendButton.getLabel().setAlignment(Align.center);
 
+        label = new ConquestLabel("Press Q to send", sendButton.getX(), numberField.getY() + dimensions * 1.4f, 200, 1);
+
         addActor(numberField);
         addActor(divideButton);
         addActor(doubleButton);
         addActor(sendButton);
+        addActor(label);
     }
 
     int getValue() {
@@ -53,5 +58,9 @@ class PartialSendGroup extends Group {
 
     TextButton getSendButton() {
         return sendButton;
+    }
+
+    float getLabelY() {
+        return label.getY();
     }
 }
