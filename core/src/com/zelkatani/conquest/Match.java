@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.zelkatani.conquest.entities.Tile;
 import com.zelkatani.conquest.multiplayer.Client;
@@ -19,12 +18,12 @@ public class Match implements Disposable {
 
     private SerialArray<Tile> tiles;
 
-    private Client client;
+    public static Client client;
     private Player player;
 
     public Match(Client client, Player player) {
-        this.client = client;
-        this.tiles = this.client.getMap();
+        Match.client = client;
+        this.tiles = Match.client.getMap();
         this.player = player;
 
         cam = new ConquestCamera(this.tiles);
@@ -39,32 +38,36 @@ public class Match implements Disposable {
         }
 
         Tile random = this.tiles.get(MathUtils.random(this.tiles.size - 1));
+        while (random.getOwner() != Owner.None) {
+            random = this.tiles.get(MathUtils.random(this.tiles.size - 1));
+        }
         player.setCapital(random);
+        client.send(random);
 
         cam.position.set(random.getX(Align.center), random.getY(Align.center), 0);
 
         stage.addActor(tileGroup);
         stage.addActor(labelGroup);
-
-        Timer.schedule(new Timer.Task() {
-            @Override
-            public void run() {
-                client.send();
-            }
-        }, 0.1f, 0.01f);
     }
 
     public void draw() {
-        for (Tile tile : tiles) {
-            if (tile.getOwner() != player) {
-                tile.setHidden(true);
+        if (player.getOwned().size != 0) {
+            for (Tile tile : tiles) {
+                if (tile.getOwner() != player) {
+                    tile.setHidden(true);
+                }
             }
-        }
 
-        for (Tile tile : player.getOwned()) {
-            for (Tile neighbor : tile.getNeighbors()) {
-                if (neighbor.getOwner() == player) continue;
-                neighbor.setHidden(false);
+            for (Tile tile : player.getOwned()) {
+                for (Tile neighbor : tile.getNeighbors()) {
+                    if (neighbor.getOwner() == player) continue;
+                    neighbor.setHidden(false);
+                }
+            }
+        } else {
+            // Player owns nothing, so they've lost the match.
+            for (Tile tile : tiles) {
+                tile.setHidden(false);
             }
         }
 

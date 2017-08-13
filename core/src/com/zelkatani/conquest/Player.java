@@ -10,15 +10,14 @@ public class Player extends Owner implements Json.Serializable {
     private SerialArray<Tile> owned;
     private Tile capital;
 
+    public Player() {
+        this(Color.WHITE);
+    }
+
     public Player(Color color) {
         super(color);
 
         owned = new SerialArray<>();
-    }
-
-    public Player(Color color, Tile capital) {
-        this(color);
-        setCapital(capital);
     }
 
     public void setCapital(Tile capital) {
@@ -34,10 +33,6 @@ public class Player extends Owner implements Json.Serializable {
             }
         }
         capital.setTroops(sum);
-    }
-
-    public boolean ownsCapital() {
-        return capital.getOwner() == this;
     }
 
     public SerialArray<Tile> getOwned() {
@@ -57,11 +52,12 @@ public class Player extends Owner implements Json.Serializable {
         json.writeObjectStart("player");
         json.writeValue("id", getId());
         json.writeValue("color", getColor().toString());
-        json.writeValue("capital", capital);
         json.writeObjectEnd();
     }
 
     @Override
     public void read(Json json, JsonValue jsonData) {
+        setId(jsonData.getInt("id"));
+        setColor(Color.valueOf(jsonData.getString("color")));
     }
 }

@@ -6,24 +6,17 @@ import com.zelkatani.conquest.Player;
 import com.zelkatani.conquest.entities.Tile;
 
 public class Packet implements Json.Serializable {
-    private SerialArray<Tile> tiles;
     private Player player;
+    private Tile tile;
 
-    public Packet(Player player, SerialArray<Tile> tiles) {
+    public Packet(Player player, Tile tile) {
         this.player = player;
-        this.tiles = new SerialArray<>();
-        this.tiles.addAll(player.getOwned());
-
-        for (Tile tile : tiles) {
-            if (tile.isAttacked()) {
-                this.tiles.add(tile);
-            }
-        }
+        this.tile = tile;
     }
 
     @Override
     public void write(Json json) {
-        tiles.write(json);
+        tile.write(json);
         player.write(json);
     }
 

@@ -80,7 +80,6 @@ public class Tile extends Actor implements Disposable, Json.Serializable, Compar
     }
 
     public void update() {
-        if (owner instanceof Player && !((Player) owner).ownsCapital()) return;
         troops += owner != Owner.None ? 3 : 2;
 
         if (city != null) {
@@ -211,10 +210,12 @@ public class Tile extends Actor implements Disposable, Json.Serializable, Compar
 
     @Override
     public void write(Json json) {
+        json.writeObjectStart("tile");
         json.writeValue("region", region);
         json.writeValue("index", index);
         json.writeValue("owner", owner.getId());
         json.writeValue("troops", troops);
+        json.writeObjectEnd();
     }
 
     @Override

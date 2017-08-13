@@ -20,6 +20,10 @@ public class Owner {
         return color;
     }
 
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
     public int getId() {
         return id;
     }

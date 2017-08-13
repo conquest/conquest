@@ -7,10 +7,12 @@ import com.zelkatani.conquest.entities.City;
 import com.zelkatani.conquest.entities.Tile;
 import com.zelkatani.conquest.multiplayer.SerialArray;
 
+import java.util.HashMap;
+
 public class Level {
     private static JsonReader reader = new JsonReader();
 
-    public static SerialArray<Tile> load(String map) {
+    public static SerialArray<Tile> load(String map, HashMap<Integer, Player> players) {
         JsonValue value = reader.parse(map);
         float scale = value.getFloat("scale");
         JsonValue regions = value.get("regions");
@@ -33,6 +35,10 @@ public class Level {
                     City c = new City(cx + t.getX(), cy + t.getY(), city.getBoolean("major"));
 
                     t.setCity(c);
+                }
+
+                if (players.get(tile.getInt("owner")) != null) {
+                    t.setOwner(players.get(tile.getInt("owner")));
                 }
 
                 t.setIndex(tile.getInt("index"));

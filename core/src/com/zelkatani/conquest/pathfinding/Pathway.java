@@ -4,6 +4,7 @@ import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 import com.badlogic.gdx.ai.pfa.GraphPath;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
 import com.badlogic.gdx.utils.Array;
+import com.zelkatani.conquest.Match;
 import com.zelkatani.conquest.Owner;
 import com.zelkatani.conquest.entities.Tile;
 import com.zelkatani.conquest.entities.Troop;
@@ -71,6 +72,7 @@ public class Pathway {
 
         if (found) {
             current.adjustTroops(-value);
+            Match.client.send(current);
             Troop troop = new Troop(value, graphPath);
             troop.setColor(current.getOwner().getColor());
             current.getStage().addActor(troop);

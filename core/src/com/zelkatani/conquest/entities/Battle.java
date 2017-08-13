@@ -1,5 +1,6 @@
 package com.zelkatani.conquest.entities;
 
+import com.zelkatani.conquest.Match;
 import com.zelkatani.conquest.Player;
 
 public class Battle {
@@ -21,6 +22,7 @@ public class Battle {
             this.defender.setOwner((Player) this.attacker.getOwner());
             this.defender.setTroops(this.troop.getTroops());
         }
+        Match.client.send(defender);
     }
 
     private void battle() {

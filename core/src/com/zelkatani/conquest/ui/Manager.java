@@ -71,15 +71,15 @@ public class Manager {
     }
 
     private void send() {
-        Manager.this.pathway.deselect();
-        Manager.this.pathway.send(sendGroup.getValue());
+        pathway.deselect();
+        pathway.send(sendGroup.getValue());
 
         setVisible(false);
     }
 
     private void sendMax() {
-        Manager.this.pathway.deselect();
-        Manager.this.pathway.sendMax();
+        pathway.deselect();
+        pathway.sendMax();
 
         setVisible(false);
     }
@@ -110,7 +110,7 @@ public class Manager {
             if (Input.Keys.Q == keycode) {
                 send();
             }
-            if (Input.Keys.E == keycode) {
+            if (Input.Keys.E == keycode || Input.Keys.ENTER == keycode) {
                 sendMax();
             }
 

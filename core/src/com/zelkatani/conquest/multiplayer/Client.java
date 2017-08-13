@@ -2,7 +2,6 @@ package com.zelkatani.conquest.multiplayer;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.JsonWriter;
@@ -32,7 +31,6 @@ public class Client {
     private HashMap<Integer, Player> players;
     private Player player;
 
-    // TODO pvp syncing
     public Client(Player player) {
         players = new HashMap<>();
         this.player = player;
@@ -48,38 +46,26 @@ public class Client {
 
             @Override
             public Packet read(Json json, JsonValue jsonData, Class type) {
-                JsonValue tiles = jsonData.get("tiles");
+                JsonValue tile = jsonData.get("tile");
                 JsonValue player = jsonData.get("player");
 
-                if (tiles == null) {
-                    Client.this.player.setId(jsonData.getInt("id"));
-                    return null;
-                } else {
-                    if (players.get(player.getInt("id")) == null) {
-                        Tile cap = map.get(player.get("capital").getInt("index"));
-                        String color = player.getString("color");
-
-                        Player opponent = new Player(Color.valueOf(color), cap);
-                        opponent.setId(player.getInt("id"));
-                        players.put(opponent.getId(), opponent);
-                    }
+                if (tile == null && jsonData.get("id") == null) {
+                    throw new SerializationException();
                 }
 
-                for (JsonValue tile : tiles) {
-                    Tile t = map.get(tile.getInt("index"));
-                    if (tile.getInt("owner") == 0) {
-                        t.setTroops(tile.getInt("troops"));
-                        continue;
-                    }
+                if (tile == null || players.get(player.getInt("id")) == null) {
+                    Player p = json.readValue(Player.class, tile == null ? jsonData : player);
+                    players.put(p.getId(), p);
+                    if (tile == null) return null;
+                }
 
+                Tile t = map.get(tile.getInt("index"));
+                t.setTroops(tile.getInt("troops"));
+                if (tile.getInt("owner") != 0) {
                     Player p = players.get(tile.getInt("owner"));
-                    if (t.getOwner() == Client.this.player && t.isAttacked()) {
-                        continue;
-                    } else if (p != null) {
-                        t.setOwner(p);
-                        p.add(t);
-                    }
                     t.setTroops(tile.getInt("troops"));
+                    t.setOwner(p);
+                    p.add(t);
                 }
                 return null;
             }
@@ -95,9 +81,9 @@ public class Client {
         receiveThread.start();
     }
 
-    public void send() {
+    public void send(Tile tile) {
         try {
-            Packet packet = new Packet(player, map);
+            Packet packet = new Packet(player, tile);
             outputStream.writeBytes(json.toJson(packet));
         } catch (IOException io) {
             io.printStackTrace();
@@ -109,22 +95,25 @@ public class Client {
             try {
                 String str = reader.readLine();
                 try {
-                    json.fromJson(Packet.class, str);
-                } catch (SerializationException | IllegalArgumentException e) {
+                    map = Level.load(str, players);
+                    map.sort();
+                    Gdx.app.postRunnable(() -> {
+                        MatchScreen matchScreen = new MatchScreen(new Match(Client.this, player));
+                        ((Game) Gdx.app.getApplicationListener()).setScreen(matchScreen);
+                    });
+                } catch (Exception e) {
                     try {
-                        map = Level.load(str);
-                        map.sort();
-                        Gdx.app.postRunnable(() -> {
-                            MatchScreen matchScreen = new MatchScreen(new Match(Client.this, player));
-                            ((Game) Gdx.app.getApplicationListener()).setScreen(matchScreen);
-                        });
+                        json.fromJson(Packet.class, str);
                     } catch (Exception e2) {
                         if (str.equals("refresh")) {
                             for (int i = 0; i < map.size; i++) {
                                 map.get(i).update();
                             }
-                        } else {
+                        } else if (str.contains(":")) {
                             Hud.getTimer().setText(str);
+                        } else {
+                            player.setId(Integer.parseInt(str));
+                            players.put(player.getId(), player);
                         }
                     }
                 }

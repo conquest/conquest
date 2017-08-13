@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Align;
 import com.zelkatani.conquest.Assets;
 import com.zelkatani.conquest.Assets.ConquestLabel;
+import com.zelkatani.conquest.Match;
 
 public class Troop extends Actor {
     private int troops;
@@ -84,6 +85,7 @@ public class Troop extends Actor {
             Tile last = path.get(path.getCount() - 1);
             if (last.getOwner() == path.get(0).getOwner()) {
                 last.adjustTroops(troops);
+                Match.client.send(last);
             } else {
                 new Battle(last, path.get(path.getCount() - 2), this);
             }
