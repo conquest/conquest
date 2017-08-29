@@ -72,8 +72,8 @@ public class Client {
         });
     }
 
-    public void connect(String host) throws IOException {
-        socket = new Socket(host, 8080);
+    public void connect(String host, int port) throws IOException {
+        socket = new Socket(host, port);
         outputStream = new DataOutputStream(socket.getOutputStream());
         reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
